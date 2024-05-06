@@ -1,7 +1,27 @@
+using System;
+using Microsoft.EntityFrameworkCore;
+using Shop;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddRazorPages();
+builder.Services.AddSession();
+builder.Services.AddMvc();
+builder.Services.AddMemoryCache();
+
+builder.Configuration.AddJsonFile("dbsettings.json");
+//builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Добавляем контекст базы данных с использованием строки подключения
+builder.Services.AddDbContext<AppDBContext>(options =>
+    options.UseSqlServer(connectionString));
+
 
 var app = builder.Build();
 
@@ -12,6 +32,10 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseSession();
+app.UseStatusCodePages();
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
