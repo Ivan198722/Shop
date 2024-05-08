@@ -1,7 +1,7 @@
 {
 
   "ConnectionStrings": {
-    "DefaultConnection": "Server=DESKTOP-D7KOSMM;Database=ProjectShop;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "DefaultConnection": "Server=DESKTOP-D7KOSMM;Database=ProjectShop;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true;"
   },
   "Logging": {
     "LogLevel": {
