@@ -6,7 +6,7 @@ namespace Shop.Models
     {
         public int Id { get; set; }
 
-        public int categoryId { get; set; }
+        public int productId { get; set; }
 
         public float? screen {  get; set; }
 
@@ -22,7 +22,7 @@ namespace Shop.Models
 
         public string? operatingSystem { get; set; }
 
-       public virtual Category Category { get; set; }
+       public virtual Product Product { get; set; }
 
 
         [NotMapped]

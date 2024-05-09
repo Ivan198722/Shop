@@ -12,8 +12,8 @@ using Shop;
 namespace Shop.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240508165826_create db")]
-    partial class createdb
+    [Migration("20240509161545_create DB")]
+    partial class createDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,11 +54,11 @@ namespace Shop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<double?>("batteryCapacity")
                         .HasColumnType("float");
-
-                    b.Property<int>("categoryId")
-                        .HasColumnType("int");
 
                     b.Property<string>("color")
                         .HasColumnType("nvarchar(max)");
@@ -72,6 +72,9 @@ namespace Shop.Migrations
                     b.Property<string>("port")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("productId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ram")
                         .HasColumnType("int");
 
@@ -80,7 +83,9 @@ namespace Shop.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("categoryId");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("productId");
 
                     b.ToTable("CellphoneProperties");
                 });
@@ -230,7 +235,7 @@ namespace Shop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("categoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("color")
@@ -239,9 +244,14 @@ namespace Shop.Migrations
                     b.Property<string>("port")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("productId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("categoryId");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("productId");
 
                     b.ToTable("PhotoProperties");
                 });
@@ -342,7 +352,7 @@ namespace Shop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("categoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("color")
@@ -357,6 +367,9 @@ namespace Shop.Migrations
                     b.Property<string>("port")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("productId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("refreshRate")
                         .HasColumnType("int");
 
@@ -368,20 +381,26 @@ namespace Shop.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("categoryId");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("productId");
 
                     b.ToTable("TVProperties");
                 });
 
             modelBuilder.Entity("Shop.Models.CellphoneProperties", b =>
                 {
-                    b.HasOne("Shop.Models.Category", "Category")
+                    b.HasOne("Shop.Models.Category", null)
                         .WithMany("cellphoneProperties")
-                        .HasForeignKey("categoryId")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Shop.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("productId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Shop.Models.FinishedOrder", b =>
@@ -435,13 +454,17 @@ namespace Shop.Migrations
 
             modelBuilder.Entity("Shop.Models.PhotoProperties", b =>
                 {
-                    b.HasOne("Shop.Models.Category", "Category")
+                    b.HasOne("Shop.Models.Category", null)
                         .WithMany("photoProperties")
-                        .HasForeignKey("categoryId")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Shop.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("productId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Shop.Models.Product", b =>
@@ -479,13 +502,17 @@ namespace Shop.Migrations
 
             modelBuilder.Entity("Shop.Models.TVProperties", b =>
                 {
-                    b.HasOne("Shop.Models.Category", "Category")
+                    b.HasOne("Shop.Models.Category", null)
                         .WithMany("tvProperties")
-                        .HasForeignKey("categoryId")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Shop.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("productId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Shop.Models.Category", b =>
