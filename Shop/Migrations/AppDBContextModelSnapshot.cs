@@ -40,7 +40,7 @@ namespace Shop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Shop.Models.CellphoneProperties", b =>
@@ -84,7 +84,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("productId");
 
-                    b.ToTable("CellphoneProperties");
+                    b.ToTable("CellphoneProperties", (string)null);
                 });
 
             modelBuilder.Entity("Shop.Models.Customer", b =>
@@ -136,7 +136,7 @@ namespace Shop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("Shop.Models.FinishedOrder", b =>
@@ -168,7 +168,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("productID");
 
-                    b.ToTable("FinishedOrders");
+                    b.ToTable("FinishedOrders", (string)null);
                 });
 
             modelBuilder.Entity("Shop.Models.Image", b =>
@@ -192,7 +192,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("productId");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("Shop.Models.OrderDetail", b =>
@@ -221,7 +221,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("productID");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("Shop.Models.PhotoProperties", b =>
@@ -250,7 +250,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("productId");
 
-                    b.ToTable("PhotoProperties");
+                    b.ToTable("PhotoProperties", (string)null);
                 });
 
             modelBuilder.Entity("Shop.Models.Product", b =>
@@ -288,7 +288,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("categoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Shop.Models.ProductHighlights", b =>
@@ -310,7 +310,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("productId");
 
-                    b.ToTable("ProductHighlights");
+                    b.ToTable("ProductHighlights", (string)null);
                 });
 
             modelBuilder.Entity("Shop.Models.ShopCartItem", b =>
@@ -338,7 +338,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ShopCartItems");
+                    b.ToTable("ShopCartItems", (string)null);
                 });
 
             modelBuilder.Entity("Shop.Models.TVProperties", b =>
@@ -382,7 +382,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("productId");
 
-                    b.ToTable("TVProperties");
+                    b.ToTable("TVProperties", (string)null);
                 });
 
             modelBuilder.Entity("Shop.Models.CellphoneProperties", b =>

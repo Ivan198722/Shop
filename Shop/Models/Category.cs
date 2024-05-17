@@ -1,4 +1,7 @@
-﻿namespace Shop.Models
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Shop.Models
 {
     public class Category
     {
@@ -16,6 +19,8 @@
 
         public virtual IEnumerable<PhotoProperties> photoProperties { get; set; }
 
-       
+
+        [NotMapped]
+        public bool IsMatchingCategory{ get; set; }
     }
 }

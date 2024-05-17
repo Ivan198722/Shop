@@ -1,0 +1,89 @@
+﻿
+@{
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+} 
+
+
+
+
+
+
+    <div class="navibar container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+
+
+            <li class="naviItem-model"> 
+                <a class="category nav-link d-flex align-items-center gap-2">
+                   Model
+                </a>
+                <ul class="model-menu nav flex-column" style="display: none">
+
+                    @foreach (var category in Model.Products)
+                    {
+                        @foreach(var prod in category.products)
+                        {
+                        <li>
+
+                            <a class="category-name nav-link d-flex align-items-center ms-2 pt-0" href="#" @*  href="/Admin/ProductList?categoryId=@category.Category.Id" *@>
+                                    @prod.products.manufacturer
+                            </a>
+                        </li>
+                        }
+                    }
+                    </ul>
+            </li>
+                <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+            </ul>
+
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
+            </form>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-outline-light me-2">Login</button>
+                <button type="button" class="btn btn-warning">Sign-up</button>
+            </div>
+        </div>
+    </div>
+@foreach(var category in Model.Products)
+{
+    <div class="d-flex align-items-center mt-1">
+        <h4>@category.Category.name</h4>
+
+        </div>
+   
+        
+        <table>
+        <thead>
+            <tr>
+                <th>Model</th>
+                <th>Nazwa</th>
+                <th>Cena</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in category.products)
+            {
+
+                <tr>
+                    <td>@product.products.manufacturer</td>
+                    <td>@product.products.name</td> 
+                    <td>@product.products.price</td> 
+                    
+                   
+                </tr>
+
+
+            }
+        </tbody>
+    </table>
+
+} 
+    
+    

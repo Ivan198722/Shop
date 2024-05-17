@@ -26,6 +26,12 @@ namespace Shop.Models
 
         public virtual IEnumerable<ProductHighlights> Highlights { get; set; }
 
+        public virtual IEnumerable<CellphoneProperties> CellphoneProperties { get; set; }
+
+        public virtual IEnumerable<TVProperties> TVProperties { get; set; }
+
+        public virtual IEnumerable<PhotoProperties> PhotoProperties { get; set; }
+
         
 
         //[NotMapped]
