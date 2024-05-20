@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop.Interfaces;
 using Shop.Models;
+using Shop.Repository;
 using Shop.ViewModels;
 
 
@@ -24,15 +25,6 @@ namespace Shop.Controllers
         }
 
       
-
-        //public IActionResult ProductList(int categoryId)
-        //{
-        //    var products = _adminAllProducts.GetProductOfCategory(categoryId);
-
-        //    var viewModel = new AdminViewModel { Products = products };
-
-        //    return View(viewModel);
-        //}
         public async Task<IActionResult> ProductList(int categoryId)
         {
             var products = await _adminAllProducts.GetProductOfCategoryAsync(categoryId);
@@ -40,6 +32,13 @@ namespace Shop.Controllers
             var viewModel = new AdminViewModel { Products = products };
 
             return View(viewModel);
+        }
+
+        public async Task <IActionResult> addProduct(int categoryId, string manufacturer, string name, ushort price)
+        {
+           await _adminAllProducts.AddProductAsync(categoryId, manufacturer, name, price);
+            return RedirectToAction("ProductList", new { categoryId = categoryId });
+
         }
     }
 }

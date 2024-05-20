@@ -55,7 +55,19 @@ namespace Shop.Repository
                 .ToListAsync();
         }
 
-       
+        public async Task AddProductAsync(int categoryId, string manufacturer, string name, ushort price)
+        {
+            await _context.Products.AddAsync(new Product
+            {
+                manufacturer = manufacturer,
+                name = name,
+                price = price,
+                categoryId = categoryId
+                
+            });
+            await _context.SaveChangesAsync();
+        }
+
 
     }
 

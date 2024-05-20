@@ -29,3 +29,19 @@ a{
     background-color: lightblue
 }
 
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 3;
+    text-align: left;
+    background-color: white;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+

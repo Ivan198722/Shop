@@ -4,7 +4,28 @@
 } 
 
 
+<style>
 
+    .square-button {
+        width: 100%; /* Сделаем ширину кнопки равной высоте */
+        height: 100%; /* Сделаем высоту кнопки равной высоте */
+        border-radius: 0; /* Убираем все скругления */
+    }
+
+    .textarea {
+        height: 1.8em;
+        width: 100%;
+        box-sizing: border-box;
+        border: none;
+        
+    }
+    
+   
+
+    .square-button svg {
+        pointer-events: none; /* Чтобы иконка не мешала нажатию кнопки */
+    }
+</style>
 
 
 
@@ -16,8 +37,8 @@
 
 
             <li class="naviItem-model"> 
-                <a class="category nav-link d-flex align-items-center gap-2">
-                   Model
+                <a class="model-bar nav-link d-flex align-items-center gap-2">
+                   Marka
                 </a>
                 <ul class="model-menu nav flex-column" style="display: none">
 
@@ -28,7 +49,7 @@
                         <li>
 
                             <a class="category-name nav-link d-flex align-items-center ms-2 pt-0" href="#" @*  href="/Admin/ProductList?categoryId=@category.Category.Id" *@>
-                                    @prod.products.manufacturer
+                                    @prod.manufacturer
                             </a>
                         </li>
                         }
@@ -54,14 +75,16 @@
 {
     <div class="d-flex align-items-center mt-1">
         <h4>@category.Category.name</h4>
+        <h4>@category.Category.Id</h4>
 
         </div>
    
         
-        <table>
+        <table class="col-lg-8">
         <thead>
             <tr>
-                <th>Model</th>
+                <th>ID</th>
+                <th>Marka</th>
                 <th>Nazwa</th>
                 <th>Cena</th>
                 
@@ -72,18 +95,60 @@
             {
 
                 <tr>
-                    <td>@product.products.manufacturer</td>
-                    <td>@product.products.name</td> 
-                    <td>@product.products.price</td> 
+                    <td>@product.Id</td>
+                    <td>@product.manufacturer</td>
+                    <td>@product.name</td> 
+                    <td>@product.price</td> 
                     
                    
                 </tr>
 
 
             }
+
+            <tr>
+                <td>
+                </td>
+                <td>
+                    <textarea id="addManufacturer" class="textarea"></textarea>
+                </td>
+                <td>
+                    <textarea id="addName" class="textarea"></textarea>
+                </td>
+                <td>
+                    <textarea id="addPrice" class="textarea"></textarea>
+                </td>
+                <td>
+                    <form id="addProduct" asp-controller="Admin" asp-action="addProduct" method="post">
+                         <input type="hidden"  name="categoryId" value="@category.Category.Id" />
+                        <input type="hidden" id="manufacturer" name="manufacturer" />
+                        <input type="hidden" id="name" name="name" />
+                        <input type="hidden" id="price" name="price" />
+                        <button type="submit" class="btn btn-secondary square-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                            </svg>
+                        </button>
+                    </form>
+
+                </td>
+            </tr>
         </tbody>
     </table>
 
-} 
+   
+}
+
+<script>
+    document.getElementById("addProduct").addEventListener("submit", function (event) {
+       // Получаем значение из textarea
+       var textareaManufacturer = document.getElementById("addManufacturer").value;
+       var textareaName = document.getElementById("addName").value;
+       var textareaPrice = document.getElementById("addPrice").value;
+       // Помещаем это значение в скрытое поле
+       document.getElementById("manufacturer").value = textareaManufacturer;
+       document.getElementById("name").value = textareaName;
+       document.getElementById("price").value = textareaPrice;
+    });
     
-    
+    </script>
