@@ -32,5 +32,12 @@ namespace Shop
 
         public DbSet<FinishedOrder> FinishedOrders { get; set; }
 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Product>()
+                .Property(p => p.addDate)
+                .HasColumnType("date"); 
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿
+
 @{
     Layout = "~/Views/Shared/Admin_Layout.cshtml";
 } 
@@ -7,9 +8,9 @@
 <style>
 
     .square-button {
-        width: 100%; /* Сделаем ширину кнопки равной высоте */
-        height: 100%; /* Сделаем высоту кнопки равной высоте */
-        border-radius: 0; /* Убираем все скругления */
+        width: 100%;
+        height: 100%;
+        border-radius: 0; 
     }
 
     .textarea {
@@ -23,70 +24,146 @@
    
 
     .square-button svg {
-        pointer-events: none; /* Чтобы иконка не мешала нажатию кнопки */
+        pointer-events: none; 
     }
+
+    
+    .filtr-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; 
+    }
+
+    
+
+    .filter-item {
+        margin-top: 0.5rem; 
+    }
+
+        .filter-item input {
+            width: 7em; 
+        }
+
 </style>
 
 
 
     <div class="navibar container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+    <div class="d-flex flex-wrap align-items-center justify-content-between ">
+            <div>
+            <form asp-controller="Admin" asp-action="Filter" name="filterForm" method="post" class="d-flex align-items-center">
+            <ul class=" nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+             
+                @foreach(var cater in Model.Products)
+                {
+                       <input type="hidden" name="categoryId" value="@cater.Category.Id" />
+                }
             
-
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-
-
             <li class="naviItem-model"> 
                 <a class="model-bar nav-link d-flex align-items-center gap-2">
                    Marka
                 </a>
-                <ul class="model-menu nav flex-column" style="display: none">
+                   
+                    @foreach (var products in Model.UniqueProd)
+                {
+                <ul class="model-menu nav flex-column" @* style="display: none" *@>
+                        @foreach (var listProd in products.products)
+                       {
+                            <div class="checkbox ">
 
-                    @foreach (var category in Model.Products)
-                    {
-                        @foreach(var prod in category.products)
-                        {
-                        <li>
+                                <input type="checkbox" name="selectedModels" value="@listProd.manufacturer" @(listProd.IsMatchingManufacturer ? "checked" : "")>
+                                    <label>
+                                      
+                                    @listProd.manufacturer
+                                </label>
 
-                            <a class="category-name nav-link d-flex align-items-center ms-2 pt-0" href="#" @*  href="/Admin/ProductList?categoryId=@category.Category.Id" *@>
-                                    @prod.manufacturer
-                            </a>
-                        </li>
-                        }
-                    }
-                    </ul>
+
+                            </div> 
+                       }
+                </ul>
+                }
             </li>
-                <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+           
+       
+                <li class="naviItem-cena">
+                <div class="filtr-container">
+                    <a class="price-bar nav-link d-flex align-items-center gap-2">Cena</a>
+
+                    <div class="filter-item mt-1">
+                        <label for="price-from"></label>
+                        <input type="number" id="price-from" name="priceFrom" placeholder="Od" min="0" >
+
+                    </div>
+                    <div class="filter-item mt-1">
+                        <label for="price-to"></label>
+                        <input type="number" id="price-to" name="priceTo" placeholder="Do" min="0">
+
+                    </div>
+                </div>
+                
+               
+                </li>
+            <li class="naviItem-date">
+                <div class="filtr-container">
+                    <a class="date-bar nav-link d-flex align-items-start gap-2">Data</a>
+
+                    <div class="filter-item mt-1">
+                        <label for="from-date">Od</label>
+                        <input type="text" id="from-date" name="fromDate" placeholder="rrrr-mm-dd" min="0" pattern="\d{4}-\d{2}-\d{2}">
+
+                    </div>
+                    <div class="filter-item mt-1">
+                        <label for="to-date">Do</label>
+                        <input type="text" id="to-date" name="toDate" placeholder="rrrr-mm-dd" min="0" pattern="\d{4}-\d{2}-\d{2}">
+
+                    </div>
+
+                </div>
+               
+            </li>
+
+            <li class="d-flex align-items-center">
+                    <div class="m-2 "> <button type="submit" onclick="submitForm()" class="btn btn-warning">Filtruj</button></div>
+                </li>
+           
             </ul>
-
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
             </form>
+        </div>
+        @foreach(var category in Model.Products)
+        {
+            <div class="ms-auto">
+            <form asp-controller="Admin" asp-action="Search" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 d-flex" role="search">
+                <input type="search" class="form-control form-control-dark text-bg-dark" name="query" placeholder="Szukaj po nazwie..." aria-label="Search">
+               <input type="hidden" name="categoryId" value="@category.Category.Id"/>
+                <div class="m-1"></div>
+                <button class="btn btn-outline-success" type="submit">Szukaj</button>
+            </form>
+        </div>
+            
+        }
+       
+       
 
-            <div class="text-end">
-                <button type="button" class="btn btn-outline-light me-2">Login</button>
-                <button type="button" class="btn btn-warning">Sign-up</button>
-            </div>
+            
         </div>
     </div>
 @foreach(var category in Model.Products)
 {
     <div class="d-flex align-items-center mt-1">
         <h4>@category.Category.name</h4>
-        <h4>@category.Category.Id</h4>
+        
 
         </div>
    
         
-        <table class="col-lg-8">
+        <table class="col-lg-10">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Marka</th>
                 <th>Nazwa</th>
                 <th>Cena</th>
+                <th>Data dodania</th>
                 
             </tr>
         </thead>
@@ -98,57 +175,38 @@
                     <td>@product.Id</td>
                     <td>@product.manufacturer</td>
                     <td>@product.name</td> 
-                    <td>@product.price</td> 
-                    
-                   
-                </tr>
+                    <td>@product.price</td>
+                    <td>@product.addDate.ToString("yyyy-MM-dd")</td>
 
+
+                </tr>
 
             }
 
             <tr>
-                <td>
+                <form id="addProductForm" asp-controller="Admin" asp-action="AddProduct" method="post">
+                    <input type="hidden" name="categoryId" value="@category.Category.Id" />
+                <td></td>
+                <td class="flex-container">
+                    <input type="text" id="addManufacturer" name="manufacturer" placeholder="Marka" style="width: 100%; border: none;">
+                </td>
+                <td class="flex-container">
+                    <input type="text" id="addName" name="name" placeholder="Nazwa" style="width: 100%;border: none;">
+                </td>
+                <td class="flex-container">
+                    <input type="text" id="addPrice" name="price" placeholder="Cena" style="width: 100%;border: none;">
                 </td>
                 <td>
-                    <textarea id="addManufacturer" class="textarea"></textarea>
+                    <button type="submit" class="btn btn-secondary square-button">
+                        <span>Dodaj</span>
+                    </button>
                 </td>
-                <td>
-                    <textarea id="addName" class="textarea"></textarea>
-                </td>
-                <td>
-                    <textarea id="addPrice" class="textarea"></textarea>
-                </td>
-                <td>
-                    <form id="addProduct" asp-controller="Admin" asp-action="addProduct" method="post">
-                         <input type="hidden"  name="categoryId" value="@category.Category.Id" />
-                        <input type="hidden" id="manufacturer" name="manufacturer" />
-                        <input type="hidden" id="name" name="name" />
-                        <input type="hidden" id="price" name="price" />
-                        <button type="submit" class="btn btn-secondary square-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                            </svg>
-                        </button>
-                    </form>
-
-                </td>
+                </form>
             </tr>
+    
         </tbody>
     </table>
 
-   
-}
+   }
 
-<script>
-    document.getElementById("addProduct").addEventListener("submit", function (event) {
-       // Получаем значение из textarea
-       var textareaManufacturer = document.getElementById("addManufacturer").value;
-       var textareaName = document.getElementById("addName").value;
-       var textareaPrice = document.getElementById("addPrice").value;
-       // Помещаем это значение в скрытое поле
-       document.getElementById("manufacturer").value = textareaManufacturer;
-       document.getElementById("name").value = textareaName;
-       document.getElementById("price").value = textareaPrice;
-    });
-    
-    </script>
+

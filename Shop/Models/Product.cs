@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 
 namespace Shop.Models
 {
@@ -6,11 +8,18 @@ namespace Shop.Models
     {
         public int Id { get; set; }
 
+        
         public string manufacturer { get; set; }
-
+       
+        
         public string name { get; set; }
+       
+       
+        public decimal price { get; set; }
 
-        public ushort price { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-mm-dd}", ApplyFormatInEditMode = true)]
+        public DateTime addDate { get; set; }
         
         public int? quantity { get; set; }
 
@@ -32,9 +41,9 @@ namespace Shop.Models
 
         public virtual IEnumerable<PhotoProperties> PhotoProperties { get; set; }
 
-        
 
-        //[NotMapped]
-        //public bool IsMatchingManufacturer { get; set; }
+
+        [NotMapped]
+        public bool IsMatchingManufacturer { get; set; }
     }
 }

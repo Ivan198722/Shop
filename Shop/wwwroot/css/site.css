@@ -19,6 +19,18 @@ html {
 
 body {
   margin-bottom: 60px;
+ background-color:aliceblue;
+}
+
+.sidebar{
+    background-color:lightblue;
+    
+}
+
+
+
+.nav-link {
+    color: navy;
 }
 
 a{
@@ -26,7 +38,8 @@ a{
 }
 
 .navibar {
-    background-color: lightblue
+    background-color: lightblue;
+    
 }
 
 table {
@@ -45,3 +58,11 @@ th {
     background-color: #f2f2f2;
 }
 
+.invalid-placeholder::placeholder{
+    color:red;
+}
+
+.invalid-date {
+    border-color: red;
+    color: red;
+}
