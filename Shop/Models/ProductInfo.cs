@@ -10,10 +10,8 @@
 
         public IEnumerable<Image> images { get; set; }  
 
-        public IEnumerable<CellphoneProperties> cellphonesProperties { get; set; }
+        public IEnumerable<ProductProperties> productProperties { get; set; }
 
-        public IEnumerable<TVProperties> tvProperties { get; set; }
-
-        public IEnumerable<PhotoProperties> photoProperties { get; set; }
+        
     }
 }

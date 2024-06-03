@@ -8,12 +8,9 @@ namespace Shop.Models
     {
         public int Id { get; set; }
 
-        
         public string manufacturer { get; set; }
        
-        
         public string name { get; set; }
-       
        
         public decimal price { get; set; }
 
@@ -35,12 +32,7 @@ namespace Shop.Models
 
         public virtual IEnumerable<ProductHighlights> Highlights { get; set; }
 
-        public virtual IEnumerable<CellphoneProperties> CellphoneProperties { get; set; }
-
-        public virtual IEnumerable<TVProperties> TVProperties { get; set; }
-
-        public virtual IEnumerable<PhotoProperties> PhotoProperties { get; set; }
-
+        public virtual IEnumerable<ProductProperties> ProductProperties { get; set; }
 
 
         [NotMapped]

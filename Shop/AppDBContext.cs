@@ -18,11 +18,7 @@ namespace Shop
 
         public DbSet<ProductHighlights> ProductHighlights { get; set; }
 
-        public DbSet<CellphoneProperties> CellphoneProperties { get; set; }
-
-        public DbSet<TVProperties> TVProperties { get; set; }
-
-        public DbSet<PhotoProperties> PhotoProperties { get; set; }
+        public DbSet<ProductProperties> ProductProperties { get; set; }
 
         public DbSet<ShopCartItem> ShopCartItems { get; set; }
 
