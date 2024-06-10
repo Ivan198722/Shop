@@ -19,11 +19,16 @@ namespace Shop.Repository
 
         }
 
-        public async Task<List<ProductInfo>> GetAllCategoriesAsync()
+        public async Task<IEnumerable<ProductInfo>> GetAllCategoriesAsync()
         {
             return await _context.Categories
                 
-                .Select(c => new ProductInfo { Category = c })
+                .Select(c => new ProductInfo 
+                {
+                    Category = c ,
+                    productProperties = c.productProperties.ToList()
+                    
+                })
                 .ToListAsync();
         }
 
@@ -171,6 +176,99 @@ namespace Shop.Repository
                     products = c.products.Where(p=>p.name.StartsWith(query)).ToList()
                 })
                 .ToListAsync();
+        }
+
+        public async Task AddProperty(int categoryId, string propertyName)
+        {
+            await _context.ProductProperties.AddAsync(new ProductProperties
+            {
+                categoryId = categoryId,
+                propertyName = propertyName
+            });
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task EditProperty(int categoryId, string propertyName, string newPropertyName)
+        {
+            var properties = await _context.ProductProperties
+                .Where(p=>p.categoryId==categoryId&&p.propertyName==propertyName)
+                .ToListAsync();
+
+            if (!string.IsNullOrWhiteSpace(newPropertyName))
+            {
+                foreach (var property in properties)
+                {
+                    property.propertyName = newPropertyName;
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
+            else if (string.IsNullOrWhiteSpace(newPropertyName))
+            {
+                foreach(var property in properties)
+                {
+                    _context.ProductProperties.Remove(property);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task EditDescription(int categoryId, string newDescription)
+        {
+            var description = await _context.Categories
+                .Where(p => p.Id == categoryId )
+                .FirstOrDefaultAsync();
+
+            if (!string.IsNullOrWhiteSpace(newDescription))
+            {
+                description.description = newDescription;
+                
+                await _context.SaveChangesAsync();
+            }
+
+            else if (string.IsNullOrWhiteSpace(newDescription))
+            {
+               
+                    _context.Categories.Remove(description);
+                
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task AddCategory(string categoryName)
+        {
+            await _context.Categories.AddAsync(new Category { name=categoryName } );
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task EditCategory(int categoryId,  string newCategoryName)
+        {
+            var categories = await _context.Categories
+                .Where(p => p.Id == categoryId )
+                .ToListAsync();
+
+            if (!string.IsNullOrWhiteSpace(newCategoryName))
+            {
+                foreach (var category in categories)
+                {
+                    category.name = newCategoryName;
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
+            else if (string.IsNullOrWhiteSpace(newCategoryName))
+            {
+                foreach (var category in categories)
+                {
+                    _context.Categories.Remove(category);
+                }
+
+                await _context.SaveChangesAsync();
+            }
         }
     }
 

@@ -122,7 +122,15 @@ document.addEventListener("DOMContentLoaded", function () {
 function submitForm() {
     document.filterForm.submit();
 }
+ 
 
+ function autoResize(textarea) {
+          textarea.style.height = 'auto';
+          textarea.style.height = (textarea.scrollHeight) + 'px';
+      }
+                      document.querySelectorAll('textarea[id^="editDescriptionField-"]').forEach(function(textarea) {
+                    autoResize(textarea);
+                });
 
 //function updateFilter() {
 //    // Сохраняем позицию курсора перед обновлением формы

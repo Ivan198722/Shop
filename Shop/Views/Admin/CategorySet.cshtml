@@ -1,0 +1,114 @@
+﻿@{
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+<div class="d-flex align-content-between mt-2">
+<div class="flex-column col-lg-7">
+@foreach(var category in Model.CategoryInfo )
+{
+    
+    <div class="d-flex align-items-center m-3">
+        <div class="flex-column col-lg-5">
+    <h4>@category.Category.name</h4>
+    
+    <table >
+        <thead>
+        <th>Właściwości</th>
+        
+        </thead>
+        <tbody>
+            @foreach (var property in category.productProperties)
+            {
+                        <tr>
+                            <form id="editPropertyForm" asp-controller="Admin" asp-action="EditProperty" method="post">
+                                <input type="hidden" name="categoryId" value="@category.Category.Id" />
+                            <td>
+                                <input type="hidden" id="textProperty" name="propertyName" value="@property.propertyName">
+                                <input type="text" id="editProperty" name="newPropertyName" style="border: none;" value="@property.propertyName">
+                            </td>
+                            <td>
+                                <button type="submit" id="saveButton" class="btn btn-info square-button" style="width: 100%; border: none; ">
+                                    <span style="height: 100%;">Zapisz</span>
+                                </button>                       
+                            </td>
+                            </form>
+                        </tr>
+            }
+
+            <tr>
+                 <form id="addPropertyForm" asp-controller="Admin" asp-action="AddProperty" method="post">
+                <input type="hidden" name="categoryId" value="@category.Category.Id" />
+                <td class="flex-container">
+                <input type="text" id="addProperty" name="propertyName" placeholder="Dodaj właściwość" style="width: 100%; border: none;">
+                </td>
+            <td>
+                <button type="submit" class="btn btn-success square-button" style="width: 100%;  border: none;">
+                    <span style="height:100%;">Dodaj</span>
+                </button>
+            </td>
+                </form>
+            </tr>
+        </tbody>
+            </table>
+        </div>
+        <div class="m-2"></div>
+    <div class="col-lg-5" >
+            <label> <p6>Opis kategorii @category.Category.name </p6></label>
+        <form id="editDescription" asp-controller="Admin" asp-action="EditDescription" method="post">
+                <input type="hidden" name="categoryId" value="@category.Category.Id" />
+            <div class="flex-column" >
+                    <input type="hidden" id="textDescription" name="description" value="@category.Category.description">
+                    <textarea class="flex-column" id="editDescriptionField" name="newDescription" style="width: 100%; " oninput="autoResize(this)">@category.Category.description</textarea>
+            </div>
+              <div class="float-end">
+                    <button type="submit" id="saveDescriptionButton-" class="btn btn-info square-button" style="width: 100%; border: none; ">
+                    <span style="height: 100%;">Zapisz</span>
+                </button>
+            </div>
+        </form>
+    </div>
+    </div>
+}
+</div>
+<div class="flex-column col-lg-4">
+    <div class=" d-flex align-items-start mt-3 ">
+ <form id="addCategoryForm" asp-controller="Admin" asp-action="AddCategory" method="post" class="d-flex align-items-center w-100">
+        <input type="text" id="addCategory" name="categoryName" placeholder="Dodaj nową kategorię" class="flex-grow-1" style="width: 100%;">
+        <button type="submit" class="btn btn-success square-button ms-2" style="height: 30px;">
+            <span>Dodaj</span>
+        </button>
+    </form> 
+ </div>
+       <div class="mt-4"> 
+           <table>
+                 <thead>
+        <th>Edytowanie kategorii</th>  
+        </thead>
+        <tbody>
+         @foreach(var category in Model.CategoryInfo )
+        {
+           
+       
+                <tr>
+                   <form id="editPropertyForm" asp-controller="Admin" asp-action="EditCategory" method="post">
+                        <input type="hidden" name="categoryId" value="@category.Category.Id" />
+                    <td>
+                         
+                       <input type="text" id="editCategory" name="newCategoryName" style="border: none;" value="@category.Category.name">
+                    </td>
+                        <td>
+                            <button type="submit" id="saveButton" class="btn btn-info square-button" style="width: 100%; border: none; ">
+                                <span style="height: 100%;">Zapisz</span>
+                            </button>
+                        </td>
+                   </form>
+                </tr>
+           
+        }
+        </tbody>
+        </table>
+        </div>
+  
+   </div>
+  
+
+</div>

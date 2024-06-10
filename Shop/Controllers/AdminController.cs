@@ -85,5 +85,52 @@ namespace Shop.Controllers
             }
            
         }
+
+        public async Task<ActionResult> CategorySet()
+        { 
+            var category= await _adminAllProducts.GetAllCategoriesAsync();
+
+            var viewModels = new AdminViewModel
+            {
+                CategoryInfo=category
+            };
+            return View(viewModels);
+        }
+
+        public async Task<ActionResult> AddProperty(int categoryId, string propertyName)
+        {
+            if (!string.IsNullOrEmpty(propertyName))
+            {
+                await _adminAllProducts.AddProperty(categoryId, propertyName);
+                return RedirectToAction("CategorySet");
+            }
+            return RedirectToAction("CategorySet");
+        }
+
+        public async Task<ActionResult> EditProperty(int categoryId, string propertyName, string newPropertyName)
+        {
+            await _adminAllProducts.EditProperty(categoryId, propertyName, newPropertyName);
+
+            return RedirectToAction("CategorySet");
+        }
+
+        public async Task<ActionResult> EditDescription(int categoryId, string newDescription)
+        {
+            await _adminAllProducts.EditDescription(categoryId, newDescription);
+
+            return RedirectToAction("CategorySet");
+        }
+
+        public async Task<ActionResult> AddCategory(string categoryName)
+        {
+            await _adminAllProducts.AddCategory(categoryName);
+            return RedirectToAction("CategorySet");
+        }
+
+        public async Task<ActionResult> EditCategory(int categoryId, string newCategoryName)
+        {
+            await _adminAllProducts.EditCategory(categoryId, newCategoryName);
+            return RedirectToAction("CategorySet");
+        }
     }
 }
