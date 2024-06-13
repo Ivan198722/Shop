@@ -132,5 +132,60 @@ namespace Shop.Controllers
             await _adminAllProducts.EditCategory(categoryId, newCategoryName);
             return RedirectToAction("CategorySet");
         }
+
+        public async Task<ActionResult> EditProduct(int productId)
+        {
+           var product= await _adminAllProducts.EditProduct(productId);
+
+            var viewModel = new AdminViewModel
+            {
+                Product = product,
+            };
+
+            return View("ProductSet", viewModel);
+        }
+
+        public async Task<IActionResult> AddPhoto(int productId, IFormFile image, string fileExtension)
+        {
+            if (image != null && image.Length > 0)
+            {
+                using (var stream = image.OpenReadStream())
+                {
+                    await _adminAllProducts.AddPhoto(productId, stream, fileExtension);
+                }
+            }
+
+          
+            return RedirectToAction("EditProduct", new { productId = productId });
+        }
+        //public async Task<ActionResult> addPhoto(int productId, IFormFile image)
+        //{
+        //    if (image != null && image.Length > 0)
+        //    {
+        //        using (var stream = image.OpenReadStream())
+        //        {
+        //           await _adminAllProducts.AddPhoto(productId, stream);
+        //        }
+        //        return RedirectToAction("ProductSet", new { productId = productId });
+        //        // return Redirect(returnUrl);
+        //        //  return Redirect($"ProductAdmin{Id}");
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("ProductSet", new { productId = productId });
+        //    }
+        //}
+
+        public async Task<ActionResult> deletePhoto (int productId, int numberImg)
+        {
+            await _adminAllProducts.RemovePhoto(productId, numberImg);
+            return RedirectToAction("EditProduct", new { productId = productId });
+        }
+
+        public async Task<ActionResult> movePhoto (int productId, int numberImg)
+        {
+            await _adminAllProducts.MovePhoto(productId, numberImg);
+            return RedirectToAction("EditProduct", new { productId = productId });
+        }
     }
 }

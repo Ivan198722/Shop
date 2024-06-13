@@ -126,7 +126,7 @@ namespace Shop.Migrations
                     b.ToTable("FinishedOrders");
                 });
 
-            modelBuilder.Entity("Shop.Models.Image", b =>
+            modelBuilder.Entity("Shop.Models.Images", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -319,7 +319,7 @@ namespace Shop.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Shop.Models.Image", b =>
+            modelBuilder.Entity("Shop.Models.Images", b =>
                 {
                     b.HasOne("Shop.Models.Product", "Product")
                         .WithMany("Images")

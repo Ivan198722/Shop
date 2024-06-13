@@ -1,0 +1,176 @@
+﻿@{
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+
+
+@foreach(var category in Model.Product)
+{
+    
+    @foreach (var product in category.products)
+    {
+        <h4>@product.name</h4>
+        <div class="col-lg-8 ">
+      <div class="row justify-content-start m-1 align-items-start">
+              
+         @foreach(var picture in category.images)
+          {
+
+                
+                    <div class="picture col-lg-2 mt-3">
+                        @if (picture.img != null)
+                        {
+                            string imageSrc = "";
+                            string fileExtension = ".jpg"; 
+
+                            
+                            if (picture.img.Length >= 4)
+                            {
+                                byte[] imgHeader = new byte[4];
+                                Array.Copy(picture.img, imgHeader, 4);
+
+                                if (imgHeader.SequenceEqual(new byte[] { 137, 80, 78, 71 })) // PNG signature
+                                {
+                                    fileExtension = ".png";
+                                }
+                                else if (imgHeader.SequenceEqual(new byte[] { 255, 216, 255, 224 }) ||
+                                imgHeader.SequenceEqual(new byte[] { 255, 216, 255, 225 })) // JPEG signature
+                                {
+                                    fileExtension = ".jpg";
+                                }
+                                else if (imgHeader.SequenceEqual(new byte[] { 82, 73, 70, 70 })) // WEBP signature
+                                {
+                                    fileExtension = ".webp";
+                                }
+                            }
+
+                            
+                            switch (fileExtension)
+                            {
+                                case ".png":
+                                    imageSrc = $"data:image/png;base64,{Convert.ToBase64String(picture.img)}";
+                                    break;
+                                case ".jpg":
+                                case ".jpeg":
+                                    imageSrc = $"data:image/jpeg;base64,{Convert.ToBase64String(picture.img)}";
+                                    break;
+                                case ".webp":
+                                    imageSrc = $"data:image/webp;base64,{Convert.ToBase64String(picture.img)}";
+                                    break;
+                                default:
+                                    imageSrc = "path/to/default/image.jpg";
+                                    break;
+                            }
+
+                            <picture>
+                                <source srcset="@imageSrc" type="image/webp">
+                                <img src="@imageSrc" alt="@product.name" class="img-thumbnail" />
+                            </picture>
+                        }
+                        else
+                        {
+                            <img src="path/to/default/image.jpg" alt="Alternate Text" class="img-thumbnail" />
+                        }
+                        <div class="mt-3"></div>
+                        <div class="d-flex justify-content-between">
+                            <form id="uploadForm" asp-controller="Admin" asp-action="deletePhoto" method="post">
+                                <input type="hidden" id="productId" name="productId" value="@product.Id" />
+                                <input type="hidden" id="numberImg" name="numberImg" value="@picture.numberImgs" />
+                                <button class="btn btn-danger rounded-pill px-2" type="submit">Usuń</button>
+                            </form>
+                            @if (picture != category.images[0])
+                            {
+                                <form id="uploadForm" asp-controller="Admin" asp-action="movePhoto" method="post">
+                                    <input type="hidden" id="productId" name="productId" value="@product.Id" />
+                                    <input type="hidden" id="numberImg" name="numberImg" value="@picture.numberImgs" />
+                                    <button class="btn btn-warning rounded-pill px-2" type="submit">Przesuń</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                
+               
+          }
+            
+            <div class="picture col-lg-3 mt-3 align-items-start">
+            <div id="uploadBlock" style="display: none;">
+                <label id="fileInputLabel" for="fileInput" style="border: 1px solid black; padding: 5px; background-color: white;">Wybierz zdjęcie</label>
+                   
+                   
+                <div class="m-1"></div>
+                <form id="uploadForm" asp-controller="Admin" asp-action="addPhoto" method="post" enctype="multipart/form-data">
+                    <input type="file" id="fileInput" style="display: none;" name="image" onchange="showImageUrl(this)" />
+                    <input type="hidden" id="productId" name="productId" value="@product.Id" />
+                     <input type="hidden" name="returnUrl" value="@Context.Request.Path"/>
+                        <input type="hidden" id="fileExtension" name="fileExtension" />
+                    <button type="submit" onclick="uploadFile()">Załaduj</button>
+                </form>
+                        
+            </div>
+
+            <a href="#" onclick="showUploadBlock()" id="imgPlus">
+                <img src="\img\icons8-add-photo-96.png" alt="Plus" style="width:70%; height:auto" class="img-thumbnail" />
+                    </a>
+                    
+        </div>
+
+       
+        
+        </div>
+        </div>
+    
+}
+}
+
+<script>
+    function showUploadBlock() {
+        let uploadBlock = document.querySelector('#uploadBlock');
+        let imgPlus = document.querySelector('#imgPlus');
+        if (uploadBlock.style.display === "none") {
+            uploadBlock.style.display = "block";
+            imgPlus.style.display = "none";
+        } else {
+            uploadBlock.style.display = "none";
+            imgPlus.style.display = "block";
+        }
+    }
+
+    function showImageUrl(input) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const imageUrl = e.target.result;
+            const fileName = input.value.split("\\").pop();
+            const fileInputLabel = document.querySelector('#fileInputLabel');
+            fileInputLabel.innerText = fileName;
+
+            // Установка расширения файла
+            document.querySelector('#fileExtension').value = fileName.split('.').pop();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function handleFormSubmit(event) {
+        const fileInput = document.querySelector('#fileInput');
+        const fileExtensionInput = document.querySelector('#fileExtension');
+
+        if (fileInput.files.length === 0) {
+            alert("Выберите файл.");
+            event.preventDefault();
+            return false;
+        }
+
+        const file = fileInput.files[0];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+
+        if (fileExtension !== 'png' && fileExtension !== 'jpg' && fileExtension !== 'jpeg' && fileExtension !== 'webp') {
+            alert("Выбранный файл не является изображением (поддерживаются форматы: PNG, JPG, JPEG, WEBP).");
+            event.preventDefault();
+            return false;
+        }
+
+        fileExtensionInput.value = fileExtension;
+        return true;
+    }
+        </script>
+
+                     

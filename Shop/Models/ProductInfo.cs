@@ -8,7 +8,7 @@
 
         public IEnumerable<ProductHighlights> highlights { get; set; }
 
-        public IEnumerable<Image> images { get; set; }  
+        public IEnumerable<Images> images { get; set; }  
 
         public IEnumerable<ProductProperties> productProperties { get; set; }
 

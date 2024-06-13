@@ -28,7 +28,7 @@ namespace Shop.Models
 
         public virtual Category Category { get; set; }
 
-        public virtual IEnumerable<Image> Images { get; set; }
+        public virtual IEnumerable<Images> Images { get; set; }
 
         public virtual IEnumerable<ProductHighlights> Highlights { get; set; }
 

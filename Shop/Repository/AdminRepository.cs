@@ -4,7 +4,10 @@
 using Microsoft.EntityFrameworkCore;
 using Shop.Interfaces;
 using Shop.Models;
-
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Processing;
 
 
 namespace Shop.Repository
@@ -53,7 +56,7 @@ namespace Shop.Repository
                     Category = c,
                     products = c.products
                     .Where(p => p.categoryId == categoryId)
-                    .OrderByDescending(p => p.addDate)
+                    .OrderBy(p => p.addDate)
 
                     .ToList()
                 })
@@ -269,6 +272,164 @@ namespace Shop.Repository
 
                 await _context.SaveChangesAsync();
             }
+        }
+         
+        public async Task<IEnumerable<ProductInfo>> EditProduct(int productId)
+
+        {
+           return await _context.Products
+
+                .Include(p => p.Images)
+                .Include(p => p.ProductProperties)
+                .Include(p => p.Highlights)
+                 .Where(p => p.Id == productId)
+                .Select(p=> new ProductInfo
+                {
+                    products= new List<Product> { p},
+                    images= p.Images.Where(p=>p.productId == productId).OrderBy(p=>p.numberImgs).ToList(),
+                    productProperties=p.ProductProperties.Where(p=> p.productId == productId),
+                    highlights=p.Highlights.Where(p=>p.productId == productId)
+                   
+                })
+
+                .ToListAsync();
+        }
+
+        private byte[] GetBytesFromImage(Stream imageStream, string fileExtension)
+        {
+            try
+            {
+                using (var image = Image.Load(imageStream))
+                {
+                  
+                    int maxWidth = 400;
+                    int maxHeight = 300;
+
+                    
+                    image.Mutate(x => x.Resize(new ResizeOptions
+                    {
+                        Size = new Size(maxWidth, maxHeight),
+                        Mode = ResizeMode.Max
+                    }));
+
+                   
+                    IImageEncoder encoder = fileExtension.ToLower() switch
+                    {
+                        ".webp" => new SixLabors.ImageSharp.Formats.Webp.WebpEncoder(),
+                        _ => new PngEncoder(), // По умолчанию используем PNG
+                    };
+
+                    // Сохранение изображения в массив байтов
+                    using (var ms = new MemoryStream())
+                    {
+                        image.Save(ms, encoder);
+                        return ms.ToArray();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                return null;
+            }
+        }
+
+        private int SetNumberPhoto(int Id)
+        {
+            var pictures = _context.Images
+                .Where(c => c.productId == Id)
+                .ToList();
+
+            if (pictures.Count == 0)
+            {
+                return 1;
+
+            }
+
+            else
+            {
+                var numberPhoto = pictures.Select(c => c.numberImgs).ToList();
+
+                return numberPhoto.Max() + 1;
+            }
+
+        }
+
+        
+        public async Task AddPhoto(int Id, Stream imageStream, string fileExtension)
+        {
+            byte[] imageData =  GetBytesFromImage(imageStream, fileExtension);
+
+            if (imageData != null)
+            {
+                _context.Images.Add(new Images
+                {
+                    productId = Id,
+                    numberImgs = SetNumberPhoto(Id),
+                    img = imageData
+
+                });
+            }
+
+           await _context.SaveChangesAsync();
+        }
+
+        public async Task RemovePhoto(int Id, int numberImg)
+        {
+            var image =  _context.Images
+                .Where(c => c.productId == Id && c.numberImgs == numberImg)
+
+                .FirstOrDefault();
+
+            if (image != null)
+            {
+               _context.Remove(image);
+
+
+                var imageToUpdate = _context.Images
+                    .Where(c => c.productId == Id && c.numberImgs > numberImg).ToList();
+
+                foreach (var img in imageToUpdate)
+                {
+                    img.numberImgs -= 1;
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task MovePhoto(int Id, int numberPhoto)
+        {
+            var listPhoto = _context.Images
+                .Where(p => p.productId == Id)
+                .OrderBy(c => c.numberImgs)
+                .ToList();
+
+            foreach (var img in listPhoto)
+            {
+                img.numberImgs++;
+            }
+
+            var moveImage = _context.Images
+               .Where(p => p.productId == Id && p.numberImgs == numberPhoto).FirstOrDefault();
+
+            if (moveImage != null)
+            {
+                moveImage.numberImgs = 1;
+            }
+
+            var sortImgs = _context.Images
+                .Where(p => p.productId == Id && p.numberImgs != numberPhoto).OrderBy(p => p.numberImgs).ToList();
+
+            int newNumber = 1;
+            foreach (var img in sortImgs)
+            {
+                newNumber += 1;
+                img.numberImgs = newNumber;
+
+            }
+
+           await _context.SaveChangesAsync();
+
         }
     }
 

@@ -30,5 +30,13 @@ namespace Shop.Interfaces
         Task AddCategory(string categoryName);
 
         Task EditCategory(int categoryId, string newCategoryName);
+
+        Task<IEnumerable<ProductInfo>> EditProduct(int productId);
+
+        Task AddPhoto(int Id, Stream imageStream, string fileExtension);
+
+        Task RemovePhoto(int Id, int numberImg);
+
+        Task MovePhoto(int Id, int numberPhoto);
     }
 }

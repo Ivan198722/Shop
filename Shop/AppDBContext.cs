@@ -14,7 +14,7 @@ namespace Shop
 
         public DbSet<Product> Products  { get; set; }
 
-        public DbSet<Image> Images { get; set; }
+        public DbSet<Images> Images { get; set; }
 
         public DbSet<ProductHighlights> ProductHighlights { get; set; }
 

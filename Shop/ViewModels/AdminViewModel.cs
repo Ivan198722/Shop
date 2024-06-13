@@ -9,5 +9,7 @@ namespace Shop.ViewModels
         public IEnumerable<ProductInfo> UniqueProd {  get; set; }
 
         public IEnumerable<ProductInfo> CategoryInfo { get; set; }
+
+        public IEnumerable<ProductInfo> Product { get; set; }
     }
 }
