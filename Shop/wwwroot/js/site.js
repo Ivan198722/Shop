@@ -130,7 +130,127 @@ function submitForm() {
       }
                       document.querySelectorAll('textarea[id^="editDescriptionField-"]').forEach(function(textarea) {
                     autoResize(textarea);
-                });
+                      });
+
+function submitForm1(productId, formIdPrefix, inputIdPrefix, isChecked) {
+    // Устанавливаем значение скрытого поля в форме
+    document.getElementById(inputIdPrefix + '_' + productId).value = isChecked;
+
+    // Отправляем форму
+    document.getElementById(formIdPrefix + '_' + productId).submit();
+};
+
+function showUploadBlock() {
+    let uploadBlock = document.querySelector('#uploadBlock');
+    let imgPlus = document.querySelector('#imgPlus');
+    if (uploadBlock.style.display === "none") {
+        uploadBlock.style.display = "block";
+        imgPlus.style.display = "none";
+    } else {
+        uploadBlock.style.display = "none";
+        imgPlus.style.display = "block";
+    }
+}
+
+function showImageUrl(input) {
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const imageUrl = e.target.result;
+        const fileName = input.value.split("\\").pop();
+        const fileInputLabel = document.querySelector('#fileInputLabel');
+        fileInputLabel.innerText = fileName;
+
+        // Установка расширения файла
+        document.querySelector('#fileExtension').value = fileName.split('.').pop();
+    };
+    reader.readAsDataURL(file);
+}
+
+function handleFormSubmit(event) {
+    const fileInput = document.querySelector('#fileInput');
+    const fileExtensionInput = document.querySelector('#fileExtension');
+
+    if (fileInput.files.length === 0) {
+        alert("Wybierz plik");
+        event.preventDefault();
+        return false;
+    }
+
+    const file = fileInput.files[0];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    if (fileExtension !== 'png' && fileExtension !== 'jpg' && fileExtension !== 'jpeg' && fileExtension !== 'webp') {
+        alert("O wybrany plik nie jest obrazem (obsługiwane formaty: PNG, JPG, JPEG, WEBP).");
+        event.preventDefault();
+        return false;
+    }
+
+    fileExtensionInput.value = fileExtension;
+    return true;
+}
+
+function buttonFocus() {
+    const buttons = document.querySelectorAll('.button-edit');
+    buttons.forEach(button => {
+        button.focus();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Восстанавливаем фокус на кнопке при загрузке страницы
+    window.onload = buttonFocus;
+
+    // Устанавливаем фокус на кнопку перед отправкой формы
+    document.querySelectorAll('.button-edit').forEach(button => {
+        button.addEventListener('click', buttonFocus);
+    });
+});
+
+
+//document.addEventListener('DOMContentLoaded', function () {
+//    document.querySelectorAll('#delete-button').forEach(button => {
+//        button.addEventListener('click', function (event) {
+//            event.preventDefault();
+//            const productId = this.getAttribute('data-product-id');
+//            const alertDiv = document.querySelector('.modal');
+//            alertDiv.style.display = 'block';
+
+//            document.querySelector('#yes').addEventListener('click', function () {
+//                window.location.href = `/Admin/deleteProduct?productId=${productId}`;
+//            });
+
+//            document.querySelector('#no').addEventListener('click', function () {
+//                alertDiv.style.display = 'none';
+//            });
+//        });
+//    });
+//});
+
+//document.addEventListener('DOMContentLoaded', function () {
+//    // Функция для сохранения положения прокрутки
+//    function saveScrollPosition() {
+//        localStorage.setItem('scrollPosition', window.scrollY);
+//    }
+
+//    // Функция для восстановления положения прокрутки
+//    function restoreScrollPosition() {
+//        const scrollPosition = localStorage.getItem('scrollPosition');
+//        if (scrollPosition !== null) {
+//            window.scrollTo(0, parseInt(scrollPosition, 10));
+//            localStorage.removeItem('scrollPosition'); // Удаляем сохраненное значение после использования
+//        }
+//    }
+
+//    // Восстанавливаем положение прокрутки при загрузке страницы
+//    window.onload = restoreScrollPosition;
+
+//    // Сохраняем положение прокрутки перед отправкой формы
+//    document.querySelectorAll('.button-edit').forEach(button => {
+//        button.addEventListener('click', saveScrollPosition);
+//    });
+
+//});
 
 //function updateFilter() {
 //    // Сохраняем позицию курсора перед обновлением формы

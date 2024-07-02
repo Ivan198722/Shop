@@ -1,6 +1,7 @@
 ﻿
 
 
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Shop.Interfaces;
 using Shop.Models;
@@ -29,7 +30,10 @@ namespace Shop.Repository
                 .Select(c => new ProductInfo 
                 {
                     Category = c ,
-                    productProperties = c.productProperties.ToList()
+                    productProperties = c.productProperties
+                    .GroupBy(p=>p.propertyName)
+                    .Select(p=>p.First())
+                    .ToList()
                     
                 })
                 .ToListAsync();
@@ -81,15 +85,39 @@ namespace Shop.Repository
 
         public async Task AddProductAsync(int categoryId, string manufacturer, string name, decimal price)
         {
-            await _context.Products.AddAsync(new Product
+            var newProduct = new Product
             {
                 manufacturer = manufacturer,
                 name = name,
                 price = price,
                 categoryId = categoryId,
-                addDate = DateTime.Now.Date
-                
-            });
+                addDate = DateTime.Now.Date,
+                isFavorited = true,
+                available = true
+            };
+
+            await _context.Products.AddAsync(newProduct);
+
+            await _context.SaveChangesAsync();
+
+
+            var properties = await _context.ProductProperties
+                .Where(p => p.categoryId == categoryId)
+                .GroupBy(p=>p.propertyName)
+                .Select(p=>p.First())
+                .ToListAsync();
+
+
+
+            foreach (var property in properties)
+            {
+                await _context.ProductProperties.AddAsync(new ProductProperties
+                {
+                    productId=newProduct.Id,
+                    propertyName=property.propertyName,
+                    categoryId=property.categoryId,
+                });
+            }
             await _context.SaveChangesAsync();
         }
 
@@ -183,12 +211,27 @@ namespace Shop.Repository
 
         public async Task AddProperty(int categoryId, string propertyName)
         {
-            await _context.ProductProperties.AddAsync(new ProductProperties
+            var products = await _context.Products
+                 .Where(p => p.categoryId == categoryId)
+                 .ToListAsync();
+
+            foreach(var product in products)
             {
-                categoryId = categoryId,
-                propertyName = propertyName
-            });
-            await _context.SaveChangesAsync();
+                await _context.ProductProperties.AddAsync(new ProductProperties
+                {
+                    productId = product.Id,
+                    categoryId= categoryId,
+                    propertyName= propertyName
+                });
+                
+            }
+             await _context.SaveChangesAsync();
+            //await _context.ProductProperties.AddAsync(new ProductProperties
+            //{
+            //    categoryId = categoryId,
+            //    propertyName = propertyName
+            //});
+            //await _context.SaveChangesAsync();
         }
 
         public async Task EditProperty(int categoryId, string propertyName, string newPropertyName)
@@ -274,24 +317,43 @@ namespace Shop.Repository
             }
         }
          
-        public async Task<IEnumerable<ProductInfo>> EditProduct(int productId)
-
+        public async Task<IEnumerable<ProductInfo>> EditProduct(int productId, int categoryId)
         {
-           return await _context.Products
-
-                .Include(p => p.Images)
-                .Include(p => p.ProductProperties)
-                .Include(p => p.Highlights)
+            var images = await GetProductImages(productId);
+            var properties = await GetProductProperties(productId);
+            var highlights = await GetHighlights(productId);
+            return await _context.Products
+               
                  .Where(p => p.Id == productId)
                 .Select(p=> new ProductInfo
                 {
                     products= new List<Product> { p},
-                    images= p.Images.Where(p=>p.productId == productId).OrderBy(p=>p.numberImgs).ToList(),
-                    productProperties=p.ProductProperties.Where(p=> p.productId == productId),
-                    highlights=p.Highlights.Where(p=>p.productId == productId)
-                   
+                    images= images,
+                    productProperties=properties,
+                    highlights= highlights 
                 })
+            .ToListAsync();
+        }
 
+        public async Task<IEnumerable<Images>> GetProductImages(int productId)
+        {
+            return await _context.Images
+                .Where(im=>im.productId==productId)
+                .OrderBy(im=>im.numberImgs)
+                .ToListAsync() ;
+        }
+
+        public async Task<IEnumerable<ProductProperties>> GetProductProperties(int productId)
+        {
+            return await _context.ProductProperties
+                .Where(im=>im.productId==productId)
+                .ToListAsync () ;
+        }
+
+        public async Task<IEnumerable<ProductHighlights>> GetHighlights(int productId)
+        {
+            return await _context.ProductHighlights
+                .Where(h => h.productId == productId)
                 .ToListAsync();
         }
 
@@ -430,6 +492,198 @@ namespace Shop.Repository
 
            await _context.SaveChangesAsync();
 
+        }
+
+        public async Task EditQuantity (int productId, int quantity)
+        {
+            var product = await _context.Products
+                 .Where(p => p.Id == productId)
+                 .FirstOrDefaultAsync();
+            if (product != null)
+            {
+                product.quantity = quantity;
+            }
+            await _context.SaveChangesAsync ();
+        }
+
+        public async Task ChangeAvailable(int productId, bool available)
+        {
+          var product=  await _context.Products
+                .Where(p=>p.Id==productId)
+                .FirstOrDefaultAsync();
+
+            if (product != null)
+            {
+                product.available = available;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ChangeIsFavorited(int productId, bool isFavorited)
+        {
+            var product = await _context.Products
+                  .Where(p => p.Id == productId)
+                  .FirstOrDefaultAsync();
+
+            if (product != null)
+            {
+                product.isFavorited = isFavorited;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task EditPropertyProduct (int productId, string propertyName, string propertyParameters)
+        {
+           var productProperty = await _context.ProductProperties
+                .Where(p=>p.productId== productId&&p.propertyName==propertyName)
+                .FirstOrDefaultAsync();
+
+           
+
+            if (productProperty != null)
+            {
+                productProperty.propertyParameters = propertyParameters;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task EditHighlights(int productId, string newHighlights, string highlights)
+        {
+            var highlight= await _context.ProductHighlights
+                .Where(h=>h.productId==productId&&h.name==highlights)
+                .FirstOrDefaultAsync();
+
+            if (!string.IsNullOrEmpty(newHighlights))
+            {
+                highlight.name=newHighlights;
+
+                await _context.SaveChangesAsync();
+            }
+
+            else if(string.IsNullOrEmpty(newHighlights))
+            {
+                 _context.ProductHighlights.Remove(highlight);
+
+                await _context.SaveChangesAsync();  
+            }
+
+        }
+
+        public async Task AddHighlight(int productId, string addHighlights)
+
+        {
+            if (!string.IsNullOrEmpty(addHighlights))
+            {
+                await _context.ProductHighlights.AddAsync(new ProductHighlights
+                {
+                    productId = productId,
+                    name = addHighlights,
+
+                });
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task EditProductShortDescription(int productId, string newShortDescription)
+        {
+            var description = await _context.Products
+                .Where(p => p.Id == productId)
+                .FirstOrDefaultAsync();
+
+            
+                description.shortDescription = newShortDescription;
+
+                await _context.SaveChangesAsync();
+            
+
+            
+        }
+
+        public async Task EditProductLongDescription(int productId, string newLongDescription)
+        {
+            var description = await _context.Products
+                .Where(p => p.Id == productId)
+                .FirstOrDefaultAsync();
+
+            
+                description.longDescription = newLongDescription;
+
+                await _context.SaveChangesAsync();
+           
+        }
+
+        public async Task EditProductName(int productId, string newProductName, string productName)
+        {
+            var product = await _context.Products
+                .Where(p=>p.Id == productId)
+                .FirstOrDefaultAsync();
+
+            if(!string.IsNullOrEmpty(newProductName))
+            {
+                product.name= newProductName;
+
+                await _context.SaveChangesAsync();
+            }
+
+            if (string.IsNullOrEmpty(newProductName)&&newProductName.Length <= 5)
+            {
+                product.name = productName; await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task EditProductPrice(int productId, decimal newProductPrice, decimal productPrice)
+        {
+            var product = await _context.Products
+                .Where(p => p.Id == productId)
+                .FirstOrDefaultAsync();
+
+            if (newProductPrice!=null)
+            {
+                product.price = newProductPrice;
+
+                await _context.SaveChangesAsync();
+            }
+
+            if (newProductPrice == null )
+            {
+                product.price = productPrice; await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task DeleteProductAsync(int productId)
+        {
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == productId);
+
+            if (product != null)
+            {
+                var productProperties = await _context.ProductProperties
+                    .Where(p => p.productId == productId)
+                    .ToListAsync();
+
+                var images = await _context.Images
+                    .Where(p => p.productId == productId)
+                    .ToListAsync();
+
+                var productHighlights = await _context.ProductHighlights
+                    .Where(p => p.productId == productId)
+                    .ToListAsync();
+
+              
+                _context.ProductProperties.RemoveRange(productProperties);
+                _context.Images.RemoveRange(images);
+                _context.ProductHighlights.RemoveRange(productHighlights);
+
+               
+                _context.Products.Remove(product);
+
+                
+                await _context.SaveChangesAsync();
+            }
         }
     }
 

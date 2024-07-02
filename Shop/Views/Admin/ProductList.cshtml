@@ -54,9 +54,9 @@
             <form asp-controller="Admin" asp-action="Filter" name="filterForm" method="post" class="d-flex align-items-center">
             <ul class=" nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
              
-                @foreach(var cater in Model.Products)
+                @foreach(var categ in Model.Products)
                 {
-                       <input type="hidden" name="categoryId" value="@cater.Category.Id" />
+                       <input type="hidden" name="categoryId" value="@categ.Category.Id" />
                 }
             
             <li class="naviItem-model"> 
@@ -175,6 +175,7 @@
                 <tr>
                     <form id="editProductForm" asp-controller="Admin" asp-action="EditProduct" method="post">
                         <input type="hidden" name="productId" value="@product.Id" />
+                        <input type="hidden" name="categoryId" value="@product.categoryId" />
                     <td>@product.Id</td>
                     <td>@product.manufacturer</td>
                     <td>@product.name</td> 
@@ -206,7 +207,7 @@
                     <input type="text" id="addPrice" name="price" placeholder="Cena" style="width: 100%;border: none;">
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-secondary square-button">
+                    <button type="submit" class="button-edit btn btn-secondary square-button">
                         <span>Dodaj</span>
                     </button>
                 </td>

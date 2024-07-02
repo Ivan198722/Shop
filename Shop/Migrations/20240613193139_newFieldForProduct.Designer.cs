@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop;
 
@@ -11,9 +12,11 @@ using Shop;
 namespace Shop.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240613193139_newFieldForProduct")]
+    partial class newFieldForProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +42,7 @@ namespace Shop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Shop.Models.Customer", b =>
@@ -91,7 +94,7 @@ namespace Shop.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Shop.Models.FinishedOrder", b =>
@@ -123,7 +126,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("productID");
 
-                    b.ToTable("FinishedOrders", (string)null);
+                    b.ToTable("FinishedOrders");
                 });
 
             modelBuilder.Entity("Shop.Models.Images", b =>
@@ -147,7 +150,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("productId");
 
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Shop.Models.OrderDetail", b =>
@@ -176,7 +179,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("productID");
 
-                    b.ToTable("OrderDetails", (string)null);
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("Shop.Models.Product", b =>
@@ -223,7 +226,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("categoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Shop.Models.ProductHighlights", b =>
@@ -245,7 +248,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("productId");
 
-                    b.ToTable("ProductHighlights", (string)null);
+                    b.ToTable("ProductHighlights");
                 });
 
             modelBuilder.Entity("Shop.Models.ProductProperties", b =>
@@ -275,7 +278,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("productId");
 
-                    b.ToTable("ProductProperties", (string)null);
+                    b.ToTable("ProductProperties");
                 });
 
             modelBuilder.Entity("Shop.Models.ShopCartItem", b =>
@@ -303,7 +306,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ShopCartItems", (string)null);
+                    b.ToTable("ShopCartItems");
                 });
 
             modelBuilder.Entity("Shop.Models.FinishedOrder", b =>
@@ -382,13 +385,12 @@ namespace Shop.Migrations
                     b.HasOne("Shop.Models.Category", "Category")
                         .WithMany("productProperties")
                         .HasForeignKey("categoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Shop.Models.Product", "Product")
                         .WithMany("ProductProperties")
-                        .HasForeignKey("productId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("productId");
 
                     b.Navigation("Category");
 

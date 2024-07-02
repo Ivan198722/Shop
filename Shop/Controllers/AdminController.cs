@@ -133,16 +133,16 @@ namespace Shop.Controllers
             return RedirectToAction("CategorySet");
         }
 
-        public async Task<ActionResult> EditProduct(int productId)
+        public async Task<ActionResult> EditProduct(int productId, int categoryId)
         {
-           var product= await _adminAllProducts.EditProduct(productId);
+           var product= await _adminAllProducts.EditProduct(productId, categoryId);
 
             var viewModel = new AdminViewModel
             {
                 Product = product,
             };
 
-            return View("ProductSet", viewModel);
+            return View("ProductSet",  viewModel);
         }
 
         public async Task<IActionResult> AddPhoto(int productId, IFormFile image, string fileExtension)
@@ -158,24 +158,7 @@ namespace Shop.Controllers
           
             return RedirectToAction("EditProduct", new { productId = productId });
         }
-        //public async Task<ActionResult> addPhoto(int productId, IFormFile image)
-        //{
-        //    if (image != null && image.Length > 0)
-        //    {
-        //        using (var stream = image.OpenReadStream())
-        //        {
-        //           await _adminAllProducts.AddPhoto(productId, stream);
-        //        }
-        //        return RedirectToAction("ProductSet", new { productId = productId });
-        //        // return Redirect(returnUrl);
-        //        //  return Redirect($"ProductAdmin{Id}");
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("ProductSet", new { productId = productId });
-        //    }
-        //}
-
+       
         public async Task<ActionResult> deletePhoto (int productId, int numberImg)
         {
             await _adminAllProducts.RemovePhoto(productId, numberImg);
@@ -186,6 +169,78 @@ namespace Shop.Controllers
         {
             await _adminAllProducts.MovePhoto(productId, numberImg);
             return RedirectToAction("EditProduct", new { productId = productId });
+        }
+
+        public async Task<ActionResult> editQuantity(int productId, int newQuantity)
+        {
+            await _adminAllProducts.EditQuantity(productId, newQuantity);
+            return RedirectToAction("EditProduct", new { productId = productId });
+        }
+
+        public async Task<ActionResult> changeAvailable(int productId, bool available)
+        {
+            await _adminAllProducts.ChangeAvailable(productId, available);
+            return RedirectToAction("EditProduct", new { productId = productId });
+        }
+
+        public async Task<ActionResult> changeIsFavorited(int productId, bool isFavorited)
+        {
+            await _adminAllProducts.ChangeIsFavorited(productId, isFavorited);
+            return RedirectToAction("EditProduct", new { productId = productId });
+        }
+
+        public async Task<ActionResult> editPropertyProduct(int productId, string propertyName, string propertyParameters)
+        {
+            await _adminAllProducts.EditPropertyProduct(productId, propertyName, propertyParameters);
+            return RedirectToAction("EditProduct", new { productId = productId });
+        }
+
+        public async Task<ActionResult> editHighlights(int productId, string newHighlights, string highlights)
+        {
+            await _adminAllProducts.EditHighlights(productId, newHighlights, highlights);
+            return RedirectToAction("EditProduct", new { productId = productId });
+        }
+
+        public async Task<ActionResult> addHighlights(int productId, string addHighlights)
+        {
+            await _adminAllProducts.AddHighlight(productId, addHighlights);
+            return RedirectToAction("EditProduct", new { productId = productId });
+
+        }
+
+        public async Task<ActionResult> EditProductShortDescription(int productId, string newShortDescription)
+        {
+            await _adminAllProducts.EditProductShortDescription(productId, newShortDescription);
+            return RedirectToAction("EditProduct", new { productId = productId });
+
+        }
+
+        public async Task<ActionResult> EditProductLongDescription(int productId, string newLongDescription)
+        {
+            await _adminAllProducts.EditProductLongDescription(productId, newLongDescription);
+            return RedirectToAction("EditProduct", new { productId = productId });
+
+        }
+        
+        public async Task<ActionResult> editProductName(int productId, string newProductName, string productName)
+        {
+            await _adminAllProducts.EditProductName(productId, newProductName, productName);
+            return RedirectToAction("EditProduct", new { productId = productId });
+
+        } 
+        
+        public async Task<ActionResult> editProductPrice(int productId, decimal newProductPrice, decimal productPrice)
+        {
+            await _adminAllProducts.EditProductPrice(productId, newProductPrice, productPrice);
+            return RedirectToAction("EditProduct", new { productId = productId });
+
+        }
+
+        public async Task<ActionResult> deleteProduct(int productId, int categoryId)
+        {
+            await _adminAllProducts.DeleteProductAsync(productId);
+
+            return RedirectToAction("ProductList", new { categoryId = categoryId });
         }
     }
 }

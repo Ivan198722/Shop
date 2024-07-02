@@ -1,15 +1,56 @@
-﻿@{
+﻿
+
+@{
     Layout = "~/Views/Shared/Admin_Layout.cshtml";
 }
+
 
 
 @foreach(var category in Model.Product)
 {
     
+    
+    
     @foreach (var product in category.products)
     {
-        <h4>@product.name</h4>
-        <div class="col-lg-8 ">
+        <div class="row justify-content-between mt-1">
+           
+            <form id="editProductNameForm" asp-controller="Admin" asp-action="editProductName" method="post">
+                <input type="hidden" name="productId" value="@product.Id">
+                <input type="hidden" name="productName" value="@product.name">
+                <div class="d-flex align-items-start mt-1">
+
+                    <input type="text" id="newProductName" name="newProductName" style=" border:none; width:80%; height:auto; background-color: transparent; font-size: 1.5em; font-weight: bold;" value="@product.name">
+                    <div class="m-1"></div>
+
+                    <button class="button-edit" type="submit" style="border:none;  background-color: transparent; padding: 0; cursor: pointer;">
+                        <img src="\img\1000_F_338462346_wZZhUA9S6daekMfyuF8cBssJgj4nao8M (1) (1) (1).jpg" alt="edit" style=" background-color:transparent;" />
+
+                    </button>
+                </div>
+            </form>
+
+
+            <form id="editProductPriceForm" asp-controller="Admin" asp-action="editProductPrice" method="post" onsubmit="addNewPrice()">
+                <input type="hidden" name="productId" value="@product.Id">
+                <input type="hidden" name="productPrice" value="@product.price">
+                <div class="d-flex align-items-start mt-1">
+
+                    <input type="text" id="newProductPrice" name="newProductPrice" style=" border:none; width:30%; height:auto; background-color: transparent; font-size: 1.5em; font-weight: bold;" value="@product.price">
+                    <div class="m-1"></div>
+
+                    <button class="button-edit" type="submit" style="border:none;  background-color: transparent; padding: 0; cursor: pointer;">
+                        <img src="\img\1000_F_338462346_wZZhUA9S6daekMfyuF8cBssJgj4nao8M (1) (1) (1).jpg" alt="edit" style=" background-color:transparent;" />
+
+                    </button>
+                </div>
+            </form>
+
+            
+        </div>
+
+        <div class="d-flex align-content-between mt-2">
+        <div class="col-lg-7 ">
       <div class="row justify-content-start m-1 align-items-start">
               
          @foreach(var picture in category.images)
@@ -75,20 +116,30 @@
                             <form id="uploadForm" asp-controller="Admin" asp-action="deletePhoto" method="post">
                                 <input type="hidden" id="productId" name="productId" value="@product.Id" />
                                 <input type="hidden" id="numberImg" name="numberImg" value="@picture.numberImgs" />
-                                <button class="btn btn-danger rounded-pill px-2" type="submit">Usuń</button>
+                                <button type="submit" class="btn btn-secondary" style="background-color:red">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"></path>
+                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"></path>
+                                    </svg>
+                                </button>
                             </form>
                             @if (picture != category.images[0])
                             {
                                 <form id="uploadForm" asp-controller="Admin" asp-action="movePhoto" method="post">
                                     <input type="hidden" id="productId" name="productId" value="@product.Id" />
                                     <input type="hidden" id="numberImg" name="numberImg" value="@picture.numberImgs" />
-                                    <button class="btn btn-warning rounded-pill px-2" type="submit">Przesuń</button>
+                                    <button type="submit" class="btn btn-secondary" style="background-color:green;" >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-rewind" viewBox="0 0 16 16">
+                                            <path d="M9.196 8 15 4.633v6.734zm-.792-.696a.802.802 0 0 0 0 1.392l6.363 3.692c.52.302 1.233-.043 1.233-.696V4.308c0-.653-.713-.998-1.233-.696z"></path>
+                                            <path d="M1.196 8 7 4.633v6.734L1.196 8Zm-.792-.696a.802.802 0 0 0 0 1.392l6.363 3.692c.52.302 1.233-.043 1.233-.696V4.308c0-.653-.713-.998-1.233-.696L.404 7.304"></path>
+                                        </svg>
+                                    </button>
                                 </form>
                             }
                         </div>
                     </div>
                 
-               
+             
           }
             
             <div class="picture col-lg-3 mt-3 align-items-start">
@@ -113,64 +164,283 @@
                     
         </div>
 
-       
+        </div>
+        </div>
+<div class="m-3"></div>
+        <div class="col-lg-3">
+            <h5>Ilość w magazynie</h5>
+                
+                    <form id="editQuantityForm" asp-controller="Admin" asp-action="editQuantity" method="post" class="d-flex align-items-center w-100">
+                        <input type="hidden" name="productId" value="@product.Id" >
+
+                        <input type="hidden" id="quantity" name="quantity" value="@product.quantity">
+                    <input type="text" id="editQuantity" name="newQuantity" class="flex-grow-1" style="width: 100%; border: none; color: red;" value="@product.quantity">
+
+
+                    <button type="submit" id="saveButton" class="btn btn-success square-button ms-2" style="height:30px; border: none; ">
+                            <span style="height: 100%;">Zmień</span>
+                        </button>
+
+                    </form>
+                
+                <div class="mt-3"></div>
+                <div>
+                    <div class="form-check form-switch">
+                        
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Dostępność</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckAvailable_@product.Id" name="availableCheckbox" @(product.available ? "checked" : "") onclick="submitForm1(@product.Id, 'availabilityForm', 'availableInput', this.checked)" />
+
+                    </div>
+                    <form id="availabilityForm_@product.Id" asp-controller="Admin" asp-action="changeAvailable" method="post" style="display:none;">
+                        <input id="availableInput_@product.Id" type="hidden" name="available" value="@product.available">
+                        <input type="hidden" name="productId" value="@product.Id">
+                    </form>
+                </div>
+
+
+                <div>
+                    <div class="form-check form-switch mt-3">
+                        
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Na witrynę</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckFavorited_@product.Id" name="favoritedCheckbox" @(product.isFavorited ? "checked" : "") onclick="submitForm1(@product.Id, 'isFavoritedForm', 'isFavoritedInput', this.checked)" />
+
+                    </div>
+                    <form id="isFavoritedForm_@product.Id" asp-controller="Admin" asp-action="changeIsFavorited" method="post" style="display:none;">
+                        <input id="isFavoritedInput_@product.Id" type="hidden" name="isFavorited" value="@product.isFavorited">
+                        <input type="hidden" name="productId" value="@product.Id">
+                    </form>
+                </div>
+                
+        </div>
+        </div>
+
+      <div class="mt-4"></div>
+        <div class="d-flex align-items-start">
+            <div class ="col-lg-4">
+            <h4>
+                Właściwości</h4>
+            <table >
+                <tbody>
+
+                    @foreach (var property in category.productProperties)
+                    { <tr>
+                        <form id="editPropertyProductForm" asp-controller="Admin" asp-action="editPropertyProduct" method="post">
+                            <input type="hidden" name="productId" value="@product.Id">
+                            <input type="hidden" name="propertyName" value="@property.propertyName">
+                       
+                            <td style="border: none; background-color:transparent;" >
+                                @property.propertyName
+                            </td>
+                            <td style="border: none; background-color:transparent; ">
+                                <input type="text" id="propertyParameters" name="propertyParameters" style=" width: auto; background-color: transparent;" value="@property.propertyParameters">
+                            </td>
+
+                             <td style="border:none; background-color:transparent;">
+                                    <button class="button-edit" type="submit" style="border:none;  background-color: transparent; padding: 0; cursor: pointer;">
+                                        <img src="\img\1000_F_338462346_wZZhUA9S6daekMfyuF8cBssJgj4nao8M (1) (1) (1).jpg" alt="edit" style=" background-color:transparent;"  />
+                                   
+                                </button>
+                            </td>
+                       
+                        </form>
+
+                      </tr>
+                        
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="m-4"></div>
+
+            <div class="col-lg-4">
+                <h4>Cechy szczególne</h4>
+
+                @foreach (var highlights in category.highlights)
+                {
+                    <form id="editHighlightsForm" asp-controller="Admin" asp-action="editHighlights" method="post">
+                        <input type="hidden" name="productId" value="@product.Id">
+                        <input type="hidden"  name="highlights" value="@highlights.name">
+                    <div class="d-flex align-items-start mt-1">
+                           
+                    <input type="text" id="newHighlights" name="newHighlights" style=" width: auto; background-color: transparent;" value="@highlights.name">
+                    <div class="m-1"></div>
+
+                            <button class="button-edit" type="submit" style="border:none;  background-color: transparent; padding: 0; cursor: pointer;">
+                                <img src="\img\1000_F_338462346_wZZhUA9S6daekMfyuF8cBssJgj4nao8M (1) (1) (1).jpg" alt="edit" style=" background-color:transparent;" />
+
+                            </button>
+                    </div>
+                    </form>
+
+                }
+                <div class="mt-1"></div>
+
+                 <form id="addHighlightsForm" asp-controller="Admin" asp-action="addHighlights" method="post">
+                    <input type="hidden" name="productId" value="@product.Id">
+                <div class="d-flex align-items-start">
+                <input type="text" id="highlights" name="addHighlights" style=" width: auto; background-color: transparent;" >
+                    <div class="m-1"></div>
+                        <button class="button-edit" type="submit" style="border:none;  background-color: transparent; padding: 0; cursor: pointer;">
+                            <img src="\img\pngtree-vector-add-icon-png-image_956621 (1) (1).jpg" alt="edit" style=" background-color:transparent;" />
+
+                        </button>
+                </div>
+                </form>
+            </div>
         
+            
+
         </div>
+
+        <div class="mt-2"></div>
+
+        <div class="col-lg-5">
+            <div>
+                <h4>Krótki opis</h4>
+                <form id="editProductShortDescription" asp-controller="Admin" asp-action="EditProductShortDescription" method="post">
+                    <input type="hidden" name="productId" value="@product.Id" />
+                    <div class="flex-column">
+                        <input type="hidden" id="textProductShortDescription" name="shortDescription" value="@product.shortDescription">
+                        <textarea class="flex-column" id="editDescriptionField" name="newShortDescription" style="width: 100%; " oninput="autoResize(this)">@product.shortDescription</textarea>
+                    </div>
+                    <div class="end-0" >
+                        <button type="submit" id="saveDescriptionButton-" class="button-edit btn btn-info square-button" style="width: 15%; border: none; ">
+                            <span style="height: 100%;">Zapisz</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
         </div>
-    
+
+
+        <div class="mt-2"></div>
+        <div class="col-lg-8">
+            <div>
+                <h4>Pełny opis</h4>
+                <form id="editProductLongDescription" asp-controller="Admin" asp-action="EditProductLongDescription" method="post">
+                    <input type="hidden" name="productId" value="@product.Id" />
+                    <div class="flex-column">
+                        <input type="hidden" id="textProductShortDescription" name="shortDescription" value="@product.longDescription">
+                        <textarea class="flex-column" id="editDescriptionField" name="newLongDescription" style="width: 100%; " oninput="autoResize(this)">@product.longDescription</textarea>
+                    </div>
+                    <div class="end-0">
+                        <button type="submit" id="saveDescriptionButton-" class="button-edit btn btn-info square-button" style="width:10%; border: none; ">
+                            <span style="height: 100%;">Zapisz</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+           
+        </div>
+
+        <div class="mt-3"></div>
+        
+            <div class="justify-content-end" style="display:flex; justify-content:flex-end">
+
+              
+            <div>
+                <button id="delete-button" class=" btn btn-danger rounded-pill px-3" data-product-id="@product.Id" data-category-id="@product.categoryId" type="submit">Usuń</button>
+              
+            </div>
+               
+            </div>
+
+        <div class="modal" tabindex="-1" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                       
+                        <button type="button" id="close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" >
+                        <p style="color:red; font-weight: bold;">Jeśli usuniesz ten produkt, zostanie on bezpowrotnie usunięty z całej bazy danych!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel" class="btn btn-light" data-bs-dismiss="modal">Powrót</button>
+                        <button type="button" id="yes" class="btn btn-danger">Usuń na zawsze</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+   }
 }
-}
 
-<script>
-    function showUploadBlock() {
-        let uploadBlock = document.querySelector('#uploadBlock');
-        let imgPlus = document.querySelector('#imgPlus');
-        if (uploadBlock.style.display === "none") {
-            uploadBlock.style.display = "block";
-            imgPlus.style.display = "none";
-        } else {
-            uploadBlock.style.display = "none";
-            imgPlus.style.display = "block";
-        }
+
+       <script>
+
+    function buttonFocus() {
+        const buttons = document.querySelectorAll('.button-edit');
+        buttons.forEach(button => {
+            button.focus();
+        });
     }
 
-    function showImageUrl(input) {
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const imageUrl = e.target.result;
-            const fileName = input.value.split("\\").pop();
-            const fileInputLabel = document.querySelector('#fileInputLabel');
-            fileInputLabel.innerText = fileName;
+    document.addEventListener('DOMContentLoaded', function () {
+        // Восстанавливаем фокус на кнопке при загрузке страницы
+        window.onload = buttonFocus;
 
-            // Установка расширения файла
-            document.querySelector('#fileExtension').value = fileName.split('.').pop();
-        };
-        reader.readAsDataURL(file);
+        // Устанавливаем фокус на кнопку перед отправкой формы
+        document.querySelectorAll('.button-edit').forEach(button => {
+            button.addEventListener('click', buttonFocus);
+        });
+    });
+
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     // Функция для сохранения положения прокрутки
+    //     function saveScrollPosition() {
+    //         localStorage.setItem('scrollPosition', window.scrollY);
+    //     }
+
+    //     // Функция для восстановления положения прокрутки
+    //     function restoreScrollPosition() {
+    //         const scrollPosition = localStorage.getItem('scrollPosition');
+    //         if (scrollPosition !== null) {
+    //             window.scrollTo(0, parseInt(scrollPosition, 10));
+    //             localStorage.removeItem('scrollPosition'); // Удаляем сохраненное значение после использования
+    //         }
+    //     }
+
+    //     // Восстанавливаем положение прокрутки при загрузке страницы
+    //     window.onload = restoreScrollPosition;
+
+    //     // Сохраняем положение прокрутки перед отправкой формы
+    //     document.querySelectorAll('.button-edit').forEach(button => {
+    //         button.addEventListener('click', saveScrollPosition);
+    //     });
+
+    // });
+
+    function addNewPrice() {
+        const price = document.querySelector('#newProductPrice');
+        price.value = price.value.replace(/,/g, '.');
+        console.log(price.value);
     }
 
-    function handleFormSubmit(event) {
-        const fileInput = document.querySelector('#fileInput');
-        const fileExtensionInput = document.querySelector('#fileExtension');
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('#delete-button').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const productId = this.getAttribute('data-product-id');
+                const categoryId = this.getAttribute('data-category-id');
+                const alertDiv = document.querySelector('.modal');
+                alertDiv.style.display = 'block';
 
-        if (fileInput.files.length === 0) {
-            alert("Выберите файл.");
-            event.preventDefault();
-            return false;
-        }
+                document.querySelector('#yes').addEventListener('click', function () {
+                    window.location.href = `/Admin/deleteProduct?productId=${productId}&categoryId=${categoryId}`;
+                });
+                document.querySelector('#cancel').addEventListener('click', function () {
+                    alertDiv.style.display = 'none';
+                });
 
-        const file = fileInput.files[0];
-        const fileExtension = file.name.split('.').pop().toLowerCase();
+                document.querySelector('#close').addEventListener('click', function () {
+                    alertDiv.style.display = 'none';
+                });
+            });
+        });
+    });
 
-        if (fileExtension !== 'png' && fileExtension !== 'jpg' && fileExtension !== 'jpeg' && fileExtension !== 'webp') {
-            alert("Выбранный файл не является изображением (поддерживаются форматы: PNG, JPG, JPEG, WEBP).");
-            event.preventDefault();
-            return false;
-        }
-
-        fileExtensionInput.value = fileExtension;
-        return true;
-    }
-        </script>
-
+       </script>
                      

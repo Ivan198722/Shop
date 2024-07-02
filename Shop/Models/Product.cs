@@ -24,6 +24,10 @@ namespace Shop.Models
 
         public string? longDescription { get; set; }
 
+        public bool isFavorited { get; set; }
+
+        public bool available { get; set; }
+
         public int categoryId { get; set; }
 
         public virtual Category Category { get; set; }
