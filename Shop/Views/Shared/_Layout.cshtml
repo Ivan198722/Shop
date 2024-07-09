@@ -7,28 +7,82 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Shop.styles.css" asp-append-version="true" />
+    <style>
+        #dropdownMenuLink {
+            color: darkred;
+        }
+
+            #category-name {
+                color: brown;
+            }
+    </style>
 </head>
 <body>
+   
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Shop</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+        
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+            <div class="container-fluid p-0">
+            <div class="d-flex justify-content-between w-100">
+                <div class="p-0">
+                    <a class="nav-link" href="#">  <img src="\img\logomak_logo (2) (1).png" style="height:50px;" /> </a>
                 </div>
+                
+
+                <div class=" m-1 p-0">
+                    <a class="nav-link p-0" href="#">
+                        <img src="\img\png-transparent-shopping-cart-icon-shopping-cart-black-design-trade-thumbnail (1) (2).png" />
+                    </a>
+                </div>
+             
+            </div>
             </div>
         </nav>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between w-100">
+                    <div class="dropdown">
+                        <a  class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            Kategorie
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            @foreach (var category in ViewBag.Menu)
+                            {
+                                <li>
+                                    <a id="category-name" class="category-name nav-link d-flex align-items-center ms-2 pt-0" href="/Admin/ProductList?categoryId=@category.Category.Id">
+                                        @category.Category.name
+                                    </a>
+                                </li>
+                            }
+                            
+                        </ul>
+                       @*  <ul class="navbar-nav flex-grow-1 justify-content-between">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <svg class="bi" width="24" height="24"><use xlink:href="#aperture"></use></svg>
+                                </a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="#">Tour</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Product</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Enterprise</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+
+                        </ul> *@
+                    </div>
+
+                    <div class="ms-auto">
+                        <input type="search" class="form-control form-control-dark text-bg-dark" name="query" placeholder="Szukaj po nazwie..." aria-label="Search">
+                    </div>
+
+                </div>
+            </div>
+       
+        </nav>
+        
+       
     </header>
     <div class="container">
         <main role="main" class="pb-3">

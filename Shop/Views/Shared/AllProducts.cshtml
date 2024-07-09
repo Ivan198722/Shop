@@ -1,0 +1,62 @@
+﻿ @model ProductDetails
+
+@*<div class="col-lg-3 mt-3">
+
+    @if (Model.images != null && Model.images.Any())
+    {
+        var firstPicture = Model.images.FirstOrDefault(); // Берем первое изображение из списка
+        <img src="data:image;base64,@Convert.ToBase64String(firstPicture.img)" alt="@Model.Product.name" class="img-thumbnail" />
+    }
+    else
+    {
+        <img src="\img\2d_car.jpg" alt="@Model.Product.name" class="img-thumbnail" />
+    }
+
+    <h2> @Model.Product.name</h2>
+
+    
+
+
+    <p>Cena: @(Model.Product.price != null ? Model.Product.price.ToString("c", System.Globalization.CultureInfo.GetCultureInfo("en-US")) : "No price")</p>
+
+
+    <a asp-controller="Cars" asp-action="CarDescription" asp-route-id="@Model.Product.Id" class="btn btn-link">Детальніше</a>
+    <h4></h4>
+    <form asp-controller="ShopCart" asp-action="addToCart" method="post">
+        <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+        <input type="hidden" name="id" value="@Model.Product.Id" />
+        <input type="hidden" name="page" value="@ViewBag.CurrentPage" />
+        <button type="submit" class="btn btn-primary">Додати до кошика</button>
+    </form>
+    
+    
+    
+    
+  
+
+</div> *@
+
+<div class="product-card">
+    @if (Model.images != null && Model.images.Any())
+    {
+        var firstPicture = Model.images.FirstOrDefault(); // Берем первое изображение из списка
+        <img src="data:image;base64,@Convert.ToBase64String(firstPicture.img)" alt="@Model.Product.name" class="img-thumbnail product-image" />
+    }
+    else
+    {
+        <img src="\img\2d_car.jpg" alt="@Model.Product.name" class="img-thumbnail product-image" />
+    }
+
+    <h2 class="product-name">@Model.Product.name</h2>
+
+    <p class="product-price">Цена: @(Model.Product.price != null ? Model.Product.price.ToString("c", System.Globalization.CultureInfo.GetCultureInfo("en-US")) : "No price")</p>
+
+    <a asp-controller="Cars" asp-action="CarDescription" asp-route-id="@Model.Product.Id" class="btn btn-link">Детальніше</a>
+
+    <form asp-controller="ShopCart" asp-action="addToCart" method="post">
+        <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+        <input type="hidden" name="id" value="@Model.Product.Id" />
+        <input type="hidden" name="page" value="@ViewBag.CurrentPage" />
+        <button type="submit" class="btn btn-primary">Додати до кошика</button>
+    </form>
+</div>

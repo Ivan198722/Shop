@@ -66,3 +66,36 @@ th {
     border-color: red;
     color: red;
 }
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    border: none;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    background-color: transparent;
+}
+
+.product-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+    border:none;
+    
+}
+
+.product-name {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 15px;
+}

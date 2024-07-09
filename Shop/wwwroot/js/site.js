@@ -190,22 +190,22 @@ function handleFormSubmit(event) {
     return true;
 }
 
-function buttonFocus() {
-    const buttons = document.querySelectorAll('.button-edit');
-    buttons.forEach(button => {
-        button.focus();
-    });
-}
+//function buttonFocus() {
+//    const buttons = document.querySelectorAll('.button-edit');
+//    buttons.forEach(button => {
+//        button.focus();
+//    });
+//}
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Восстанавливаем фокус на кнопке при загрузке страницы
-    window.onload = buttonFocus;
+//document.addEventListener('DOMContentLoaded', function () {
+//    // Восстанавливаем фокус на кнопке при загрузке страницы
+//    window.onload = buttonFocus;
 
-    // Устанавливаем фокус на кнопку перед отправкой формы
-    document.querySelectorAll('.button-edit').forEach(button => {
-        button.addEventListener('click', buttonFocus);
-    });
-});
+//    // Устанавливаем фокус на кнопку перед отправкой формы
+//    document.querySelectorAll('.button-edit').forEach(button => {
+//        button.addEventListener('click', buttonFocus);
+//    });
+//});
 
 
 //document.addEventListener('DOMContentLoaded', function () {

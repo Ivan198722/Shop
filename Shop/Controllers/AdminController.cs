@@ -7,7 +7,7 @@ using Shop.ViewModels;
 
 namespace Shop.Controllers
 {
-    public class AdminController : BaseAdminController
+    public class AdminController : BaseController
     {
         private readonly IAdminAllProducts _adminAllProducts;
 

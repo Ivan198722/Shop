@@ -7,7 +7,7 @@
 {
     
     <div class="d-flex align-items-center m-3">
-        <div class="flex-column col-lg-5">
+        <div class="flex-column col-lg-6">
     <h4>@category.Category.name</h4>
     
     <table >
@@ -23,7 +23,7 @@
                                 <input type="hidden" name="categoryId" value="@category.Category.Id" />
                             <td>
                                 <input type="hidden" id="textProperty" name="propertyName" value="@property.propertyName">
-                                <input type="text" id="editProperty" name="newPropertyName" style="border: none;" value="@property.propertyName">
+                                <input type="text" id="editProperty" name="newPropertyName" style="border: none; width:100%;" value="@property.propertyName">
                             </td>
                             <td>
                                 <button type="submit" id="saveButton" class="btn btn-info square-button" style="width: 100%; border: none; ">

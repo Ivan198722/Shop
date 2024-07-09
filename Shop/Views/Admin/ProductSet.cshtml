@@ -216,7 +216,7 @@
 
       <div class="mt-4"></div>
         <div class="d-flex align-items-start">
-            <div class ="col-lg-4">
+            <div class ="col-lg-5">
             <h4>
                 Właściwości</h4>
             <table >
@@ -232,7 +232,7 @@
                                 @property.propertyName
                             </td>
                             <td style="border: none; background-color:transparent; ">
-                                <input type="text" id="propertyParameters" name="propertyParameters" style=" width: auto; background-color: transparent;" value="@property.propertyParameters">
+                                <input type="text" id="propertyParameters" name="propertyParameters" style=" width: 100%; background-color: transparent;" value="@property.propertyParameters">
                             </td>
 
                              <td style="border:none; background-color:transparent;">
@@ -370,23 +370,53 @@
 
 
        <script>
-
-    function buttonFocus() {
-        const buttons = document.querySelectorAll('.button-edit');
-        buttons.forEach(button => {
-            button.focus();
-        });
-    }
-
     document.addEventListener('DOMContentLoaded', function () {
-        // Восстанавливаем фокус на кнопке при загрузке страницы
-        window.onload = buttonFocus;
+        // Функция для установки фокуса на кнопку
+        function buttonFocus(event) {
+            event.target.focus();
+        }
 
         // Устанавливаем фокус на кнопку перед отправкой формы
         document.querySelectorAll('.button-edit').forEach(button => {
             button.addEventListener('click', buttonFocus);
         });
+
+        // Восстанавливаем положение прокрутки при загрузке страницы
+        function restoreScrollPosition() {
+            const scrollPosition = localStorage.getItem('scrollPosition');
+            if (scrollPosition !== null) {
+                window.scrollTo(0, parseInt(scrollPosition, 10));
+                localStorage.removeItem('scrollPosition'); // Удаляем сохраненное значение после использования
+            }
+        }
+
+        // Сохраняем положение прокрутки перед отправкой формы
+        function saveScrollPosition() {
+            localStorage.setItem('scrollPosition', window.scrollY);
+        }
+
+        window.onload = restoreScrollPosition;
+
+        document.querySelectorAll('.button-edit').forEach(button => {
+            button.addEventListener('click', saveScrollPosition);
+        });
     });
+    // function buttonFocus() {
+    //     const buttons = document.querySelectorAll('.button-edit');
+    //     buttons.forEach(button => {
+    //         button.focus();
+    //     });
+    // }
+
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     // Восстанавливаем фокус на кнопке при загрузке страницы
+    //     window.onload = buttonFocus;
+
+    //     // Устанавливаем фокус на кнопку перед отправкой формы
+    //     document.querySelectorAll('.button-edit').forEach(button => {
+    //         button.addEventListener('click', buttonFocus);
+    //     });
+    // });
 
     // document.addEventListener('DOMContentLoaded', function () {
     //     // Функция для сохранения положения прокрутки

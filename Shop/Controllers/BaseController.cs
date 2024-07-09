@@ -7,11 +7,11 @@ using Shop.Repository;
 
 namespace Shop.Controllers
 {
-    public class BaseAdminController : Controller, IAsyncActionFilter
+    public class BaseController : Controller, IAsyncActionFilter
     {
         private readonly IAdminAllProducts _adminRepository;
 
-        public BaseAdminController(IAdminAllProducts adminRepository)
+        public BaseController(IAdminAllProducts adminRepository)
         {
             _adminRepository = adminRepository;
         }
