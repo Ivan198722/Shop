@@ -26,7 +26,7 @@
                                 <input type="text" id="editProperty" name="newPropertyName" style="border: none; width:100%;" value="@property.propertyName">
                             </td>
                             <td>
-                                <button type="submit" id="saveButton" class="btn btn-info square-button" style="width: 100%; border: none; ">
+                                        <button type="submit" id="saveButton" class="button-edit btn btn-info square-button" style="width: 100%; border: none; ">
                                     <span style="height: 100%;">Zapisz</span>
                                 </button>                       
                             </td>
@@ -41,7 +41,7 @@
                 <input type="text" id="addProperty" name="propertyName" placeholder="Dodaj właściwość" style="width: 100%; border: none;">
                 </td>
             <td>
-                <button type="submit" class="btn btn-success square-button" style="width: 100%;  border: none;">
+                                    <button type="submit" class="button-edit btn btn-success square-button" style="width: 100%;  border: none;">
                     <span style="height:100%;">Dodaj</span>
                 </button>
             </td>
@@ -60,7 +60,7 @@
                     <textarea class="flex-column" id="editDescriptionField" name="newDescription" style="width: 100%; " oninput="autoResize(this)">@category.Category.description</textarea>
             </div>
               <div class="float-end">
-                    <button type="submit" id="saveDescriptionButton-" class="btn btn-info square-button" style="width: 100%; border: none; ">
+                            <button type="submit" id="saveDescriptionButton-" class="button-edit btn btn-info square-button" style="width: 100%; border: none; ">
                     <span style="height: 100%;">Zapisz</span>
                 </button>
             </div>
@@ -73,7 +73,7 @@
     <div class=" d-flex align-items-start mt-3 ">
  <form id="addCategoryForm" asp-controller="Admin" asp-action="AddCategory" method="post" class="d-flex align-items-center w-100">
         <input type="text" id="addCategory" name="categoryName" placeholder="Dodaj nową kategorię" class="flex-grow-1" style="width: 100%;">
-        <button type="submit" class="btn btn-success square-button ms-2" style="height: 30px;">
+                <button type="submit" class="button-edit btn btn-success square-button ms-2" style="height: 30px;">
             <span>Dodaj</span>
         </button>
     </form> 
@@ -112,3 +112,37 @@
   
 
 </div>
+
+                       <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Функция для установки фокуса на кнопку
+        function buttonFocus(event) {
+            event.target.focus();
+        }
+
+        // Устанавливаем фокус на кнопку перед отправкой формы
+        document.querySelectorAll('.button-edit').forEach(button => {
+            button.addEventListener('click', buttonFocus);
+        });
+
+        // Восстанавливаем положение прокрутки при загрузке страницы
+        function restoreScrollPosition() {
+            const scrollPosition = localStorage.getItem('scrollPosition');
+            if (scrollPosition !== null) {
+                window.scrollTo(0, parseInt(scrollPosition, 10));
+                localStorage.removeItem('scrollPosition'); // Удаляем сохраненное значение после использования
+            }
+        }
+
+        // Сохраняем положение прокрутки перед отправкой формы
+        function saveScrollPosition() {
+            localStorage.setItem('scrollPosition', window.scrollY);
+        }
+
+        window.onload = restoreScrollPosition;
+
+        document.querySelectorAll('.button-edit').forEach(button => {
+            button.addEventListener('click', saveScrollPosition);
+        });
+    });
+                       </script>

@@ -69,8 +69,11 @@ th {
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  flex-wrap: wrap;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
+  
+    
 }
 
 .product-card {
@@ -79,23 +82,32 @@ th {
     padding: 15px;
     text-align: center;
     background-color: transparent;
+    width: 300px; /* Фиксированная ширина для элементов */
+    margin-bottom: 20px; /* Отступ снизу для всех элементов */
 }
 
-.product-image {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 15px;
-    border:none;
-    
-}
+@media (max-height: 800px) {
+    .product-card {
+        margin-bottom: 10px; /* Reduce margin for smaller screens */
+    }
 
-.product-name {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-}
+    .product-image {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+        border: none;
+    }
 
-.product-price {
-    font-size: 1em;
-    color: #333;
-    margin-bottom: 15px;
-}
+    .product-name {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .product-price {
+        font-size: 1.5em;
+        color: #333;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+
+

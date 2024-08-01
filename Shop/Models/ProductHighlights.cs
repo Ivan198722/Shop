@@ -10,7 +10,11 @@ namespace Shop.Models
 
         public int productId { get; set; }
 
+      
+
         public Product Product { get; set; }
+
+        
 
         [NotMapped]
         public bool IsMatchingHighlights { get; set; }

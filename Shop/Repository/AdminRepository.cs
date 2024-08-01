@@ -334,7 +334,7 @@ namespace Shop.Repository
                 })
             .ToListAsync();
         }
-
+       
         public async Task<IEnumerable<Images>> GetProductImages(int productId)
         {
             return await _context.Images

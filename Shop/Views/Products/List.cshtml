@@ -1,0 +1,276 @@
+﻿
+<style>
+    .page-link{
+        border:none;
+        background-color:transparent;
+    }
+
+ 
+    .arrow{
+        cursor: pointer;
+    }
+
+    p{
+        font-weight:bold;
+        margin-bottom: 0;
+        
+    }
+
+  /*   .hidden {
+        display: none;
+    }
+
+    .rotate {
+        transform: rotate(180deg);
+    } */
+   
+</style>
+
+<div class="row justify-content-center mt-5 mb-2">
+<div class=" col-lg-3 mr-lg-2" style="border: 1px solid #000;">
+    
+    <div class="filter-column">
+
+
+
+
+
+            <form id="filter-form" asp-controller="Products" asp-action="Filter" method="post">
+                    <div class="justify-content-center">
+                    <p>Marka  <span class="arrow">&#9660;</span></p>
+                        @foreach (var products in Model.UniqueProd)
+                        {
+                        <ul class="hidden mb-3 model-menu nav flex-column  ">
+                                @foreach (var listProd in products.products)
+                                {
+                                     <li class="d-flex align-items-start">
+                                    <div class="checkbox ">
+
+                                        <input type="checkbox" name="selectedModels" value="@listProd.manufacturer" @(listProd.IsMatchingManufacturer ? "checked" : "")>
+                                        <label>
+
+                                            @listProd.manufacturer
+                                        </label>
+
+
+                                    </div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+
+                    </div>
+
+                        <div class="filtr-container">
+                           <p>Cena</p>
+                            <div class="filter-item mt-1">
+                                <label for="price-from"></label>
+                                <input type="number" id="price-from" name="priceFrom" placeholder="Od" min="0">
+
+                            </div>
+                            <div class="filter-item mt-1 mb-3">
+                                <label for="price-to"></label>
+                                <input type="number" id="price-to" name="priceTo" placeholder="Do" min="0">
+
+                            </div>
+                        </div>
+                        
+
+                        <div class="justify-content-center">
+                            
+                            @foreach (var property in Model.UniqueProperty)
+                            {
+
+                        <p>
+                            @property.PropertyName   <span class="arrow">&#9660;</span>
+                        </p>
+
+                                <ul class="mb-3 nav flex-column hidden ">
+                                    @foreach (var parameter in property.PropertyParameters)
+                                    {
+
+                                      <li class="d-flex align-items-start">
+                                        <div class="checkbox ">
+
+
+                                        <input type="checkbox" name="selectedProperties" value="@property.PropertyName|@parameter.Parameter" @(parameter.IsMatchingProperty ? "checked" : "") />
+                                        
+                                        <input type="hidden" name="categoryId" value="@Model.CategoryId" />
+
+                                              @if (parameter != null)
+                                              {
+                                            <label>@parameter.Parameter</label>
+                                              }
+                                        </div>
+                                      </li>
+                                       
+                                    }
+                                </ul>
+                               
+                            }
+                   
+                        </div>
+
+                <div class="justify-content-center mb-3">
+                    <p>Cechy szczególne <span class="arrow">&#9660;</span></p>
+                    @foreach (var products in Model.Highlights)
+                    {
+                        @foreach (var highlights in products.highlights)
+                            {
+                        if (highlights!=null)
+                        {
+                        <ul class=" nav flex-column hidden" >
+                            
+                                
+                                <li class="d-flex align-items-start">
+                                    
+                                        
+                                    <div class="checkbox ">
+
+                                    <input type="checkbox" name="selectedHighlights" value="@highlights.name" @(highlights.IsMatchingHighlights ? "checked" : "")>
+                                        <label>
+
+                                        @highlights.name
+                                        </label>
+
+
+                                    </div>
+                                </li>
+                                
+                        </ul>
+                        }
+                        }
+                    }
+
+                </div>
+                <button type="submit" class="btn btn-primary" style="display:none;">Filtr</button>
+
+            </form>
+            
+    </div>
+
+
+
+</div>
+    <div class="row product-grid col-lg-9 mt-2 align-items-start">
+        @if (Model.Products != null)
+        {
+
+            foreach (ProductDetails products in Model.Products)
+            {
+           
+                @Html.Partial("AllProducts", products)
+              
+            }
+        }
+    </div>
+        @{
+            var totalPages = Model.TotalPages;
+            var currentPage = Model.CurrentPage;
+            var categoryId = Model.CategoryId;
+
+                var previousPageUrl = currentPage > 1 ? $"{ViewContext.HttpContext.Request.Path}?categoryId={categoryId}&&page={currentPage - 1}" : null;
+
+               
+                var nextPageUrl = currentPage < totalPages ? $"{ViewContext.HttpContext.Request.Path}?categoryId={categoryId}&&page={currentPage + 1}" : null;
+            
+}
+
+       
+   
+    <div class="w-100 d-flex justify-content-center mt-4">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    @if (currentPage > 1)
+                    {
+                         <a class="page-link" href="@previousPageUrl" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        
+                    </a>
+                    }
+                   
+                </li>
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    var pageUrl = $"{ViewContext.HttpContext.Request.Path}?categoryId={categoryId}&&page={i}";
+                    <li class="page-item @(currentPage == i ? "active" : "")"><a class="page-link" href="@pageUrl">@i</a></li>
+                }
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+
+                    @if (currentPage != totalPages)
+                    {
+                        <a class="page-link" href="@nextPageUrl" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    }
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+
+ 
+ <script>
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const priceFrom = urlParams.get('priceFrom');
+        if (priceFrom !== null) {
+            document.getElementById('price-from').value = priceFrom;
+        }
+
+        const priceTo = urlParams.get('priceTo');
+        if (priceTo !== null) {
+            document.getElementById('price-to').value = priceTo;
+        }
+
+        
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+
+        const submitForm = () => {
+            form.submit();
+        };
+
+        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+      
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', submitForm);
+        });
+
+    });
+
+
+    // document.addEventListener('DOMContentLoaded', function () {
+    // const arrows = document.querySelectorAll('.arrow');
+    // arrows.forEach(arrow => {
+    //     arrow.addEventListener('click', function () {
+    //        // const ul = document.querySelectorAll('ul')
+    //         const ul = this.parentElement.nextElementSibling;
+    //         if (ul.classList.contains('hidden')) {
+    //             ul.classList.remove('hidden');
+    //             this.classList.add('rotate');
+    //         } else {
+    //             ul.classList.add('hidden');
+    //             this.classList.remove('rotate');
+    //         }
+    //     });
+    // });
+
+    // // Automatically expand lists with checked checkboxes
+    // document.querySelectorAll('ul').forEach(ul => {
+    //     if (ul.querySelector('input[type="checkbox"]:checked')) {
+    //         ul.classList.remove('hidden');
+    //         ul.previousElementSibling.querySelector('.arrow').classList.add('rotate');
+    //     }
+    // });
+    //     });
+</script>

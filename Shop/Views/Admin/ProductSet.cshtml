@@ -1,9 +1,7 @@
 ﻿
-
 @{
     Layout = "~/Views/Shared/Admin_Layout.cshtml";
 }
-
 
 
 @foreach(var category in Model.Product)
@@ -320,10 +318,12 @@
                 <h4>Pełny opis</h4>
                 <form id="editProductLongDescription" asp-controller="Admin" asp-action="EditProductLongDescription" method="post">
                     <input type="hidden" name="productId" value="@product.Id" />
-                    <div class="flex-column">
+                    <div class="flex-column"  >
                         <input type="hidden" id="textProductShortDescription" name="shortDescription" value="@product.longDescription">
-                        <textarea class="flex-column" id="editDescriptionField" name="newLongDescription" style="width: 100%; " oninput="autoResize(this)">@product.longDescription</textarea>
+                        <textarea class="flex-column" id="editDescriptionField" name="newLongDescription" style="width: 100%; height:300px; ">@product.longDescription</textarea>
+
                     </div>
+                    <div class="mt-1"></div>
                     <div class="end-0">
                         <button type="submit" id="saveDescriptionButton-" class="button-edit btn btn-info square-button" style="width:10%; border: none; ">
                             <span style="height: 100%;">Zapisz</span>
@@ -401,6 +401,8 @@
             button.addEventListener('click', saveScrollPosition);
         });
     });
+
+   
     // function buttonFocus() {
     //     const buttons = document.querySelectorAll('.button-edit');
     //     buttons.forEach(button => {

@@ -118,19 +118,51 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
 });
+
+
     
 function submitForm() {
     document.filterForm.submit();
 }
- 
 
- function autoResize(textarea) {
-          textarea.style.height = 'auto';
-          textarea.style.height = (textarea.scrollHeight) + 'px';
-      }
-                      document.querySelectorAll('textarea[id^="editDescriptionField-"]').forEach(function(textarea) {
-                    autoResize(textarea);
-                      });
+
+
+
+
+function autoResize(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(function (textarea) {
+        autoResize(textarea);
+        textarea.addEventListener('input', function () {
+            autoResize(textarea);
+        });
+    });
+});
+
+//function autoResize(textarea) {
+//    textarea.style.height = 'auto';
+//    textarea.style.height = (textarea.scrollHeight) + 'px';
+//}
+
+//document.addEventListener('DOMContentLoaded', function () {
+//    const textarea = document.querySelector('#editDescriptionField');
+//    if (textarea) {
+//        autoResize(textarea);
+//    }
+//});
+
+ //function autoResize(textarea) {
+ //         textarea.style.height = 'auto';
+ //         textarea.style.height = (textarea.scrollHeight) + 'px';
+ //     }
+ //                     document.querySelectorAll('textarea[id^="editDescriptionField-"]').forEach(function(textarea) {
+ //                   autoResize(textarea);
+ //                     });
 
 function submitForm1(productId, formIdPrefix, inputIdPrefix, isChecked) {
     // Устанавливаем значение скрытого поля в форме
@@ -189,7 +221,37 @@ function handleFormSubmit(event) {
     fileExtensionInput.value = fileExtension;
     return true;
 }
+document.addEventListener('DOMContentLoaded', function () {
+    // Функция для установки фокуса на кнопку
+    function buttonFocus(event) {
+        event.target.focus();
+    }
 
+    // Устанавливаем фокус на кнопку перед отправкой формы
+    document.querySelectorAll('.button-edit').forEach(button => {
+        button.addEventListener('click', buttonFocus);
+    });
+
+    // Восстанавливаем положение прокрутки при загрузке страницы
+    function restoreScrollPosition() {
+        const scrollPosition = localStorage.getItem('scrollPosition');
+        if (scrollPosition !== null) {
+            window.scrollTo(0, parseInt(scrollPosition, 10));
+            localStorage.removeItem('scrollPosition'); // Удаляем сохраненное значение после использования
+        }
+    }
+
+    // Сохраняем положение прокрутки перед отправкой формы
+    function saveScrollPosition() {
+        localStorage.setItem('scrollPosition', window.scrollY);
+    }
+
+    window.onload = restoreScrollPosition;
+
+    document.querySelectorAll('.button-edit').forEach(button => {
+        button.addEventListener('click', saveScrollPosition);
+    });
+});
 //function buttonFocus() {
 //    const buttons = document.querySelectorAll('.button-edit');
 //    buttons.forEach(button => {

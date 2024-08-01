@@ -1,56 +1,149 @@
 ﻿ @model ProductDetails
 
-@*<div class="col-lg-3 mt-3">
 
-    @if (Model.images != null && Model.images.Any())
-    {
-        var firstPicture = Model.images.FirstOrDefault(); // Берем первое изображение из списка
-        <img src="data:image;base64,@Convert.ToBase64String(firstPicture.img)" alt="@Model.Product.name" class="img-thumbnail" />
-    }
-    else
-    {
-        <img src="\img\2d_car.jpg" alt="@Model.Product.name" class="img-thumbnail" />
+<style>
+    h9{
+        font-weight:bold;
     }
 
-    <h2> @Model.Product.name</h2>
+    p9 {
+        display: block;
+        width: 100%;
+        text-align: center;
+        
+    }
 
-    
-
-
-    <p>Cena: @(Model.Product.price != null ? Model.Product.price.ToString("c", System.Globalization.CultureInfo.GetCultureInfo("en-US")) : "No price")</p>
-
-
-    <a asp-controller="Cars" asp-action="CarDescription" asp-route-id="@Model.Product.Id" class="btn btn-link">Детальніше</a>
-    <h4></h4>
-    <form asp-controller="ShopCart" asp-action="addToCart" method="post">
-        <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-        <input type="hidden" name="id" value="@Model.Product.Id" />
-        <input type="hidden" name="page" value="@ViewBag.CurrentPage" />
-        <button type="submit" class="btn btn-primary">Додати до кошика</button>
-    </form>
-    
-    
-    
-    
-  
-
-</div> *@
-
-<div class="product-card">
+</style>
+<div class="product-card ">
     @if (Model.images != null && Model.images.Any())
     {
-        var firstPicture = Model.images.FirstOrDefault(); // Берем первое изображение из списка
+        var firstPicture = Model.images.FirstOrDefault(); 
         <img src="data:image;base64,@Convert.ToBase64String(firstPicture.img)" alt="@Model.Product.name" class="img-thumbnail product-image" />
     }
     else
     {
-        <img src="\img\2d_car.jpg" alt="@Model.Product.name" class="img-thumbnail product-image" />
+        @if (Model.Product.categoryId == 1)
+        {
+            <img src="\img\png-klev-club-fwjv-p-smartfon-ikonka-png-25.png" alt="@Model.Product.name" class="img-thumbnail product-image" />
+
+        }
+        else if (Model.Product.categoryId == 2)
+        {
+            <img src="\img\w512h51213508171321.ComputerVioletSpace.png" alt="@Model.Product.name" class="img-thumbnail product-image" />
+
+        }
+        else
+        {
+            <img src="\img\depositphotos_212631884-stock-photo-forbidden-camera-icon.jpg" alt="@Model.Product.name" class="img-thumbnail product-image" />
+
+        }
     }
 
     <h2 class="product-name">@Model.Product.name</h2>
 
-    <p class="product-price">Цена: @(Model.Product.price != null ? Model.Product.price.ToString("c", System.Globalization.CultureInfo.GetCultureInfo("en-US")) : "No price")</p>
+    <p class="product-price"> @(Model.Product.price != null ? $"{Model.Product.price} PLN" : "No price")</p>
+   
+    @if (Model.Product.categoryId == 1)
+    {
+        var propertyScreenCale = Model.productProperties.FirstOrDefault(p => p.propertyName == "Przekątna ekranu (cale)");
+        var propertyScreenCm = Model.productProperties.FirstOrDefault(p => p.propertyName == "Przekątna ekranu (cm)");
+        var memory = Model.productProperties.FirstOrDefault(p => p.propertyName == "Pamięć (GB)");
+        var memoryRAM = Model.productProperties.FirstOrDefault(p => p.propertyName == "Pamięć RAM");
+        var system = Model.productProperties.FirstOrDefault(p => p.propertyName == "System operacyjny");
+        var processor = Model.productProperties.FirstOrDefault(p => p.propertyName == "Procesor");
 
+        @if(propertyScreenCale.propertyParameters!=null&& propertyScreenCm.propertyParameters != null)
+        {
+            <p9>Rozmiar wyświetlacza:<h9> @propertyScreenCale.propertyParameters"/@propertyScreenCm.propertyParameters</h9>  cm</p9>
+        }
+        else if (propertyScreenCale.propertyParameters != null)
+        {
+            <p9>Rozmiar wyświetlacza:<h9> @propertyScreenCale.propertyParameters"</h9></p9>
+        }
+        else if (propertyScreenCm.propertyParameters != null)
+        {
+            <p9>Rozmiar wyświetlacza:<h9> @propertyScreenCm.propertyParameters cm</h9></p9>
+        }
+        else
+        {
+            
+        }
+
+        @if (memory.propertyParameters != null)
+        {
+            <p9>Pamięć <h9>@memory.propertyParameters GB</h9></p9>
+        }
+        else
+        {
+            
+        }
+
+        @if (system.propertyParameters != null)
+        {
+            <p9>System operacyjny <h9>@system.propertyParameters </h9></p9>
+        }
+        else
+        {
+
+        }
+
+
+        @if (processor.propertyParameters != null)
+        {
+            <p9>Procesor <h9>@processor.propertyParameters </h9></p9>
+        }
+        else
+        {
+
+        }
+    }
+
+    else
+    {
+        
+    }
+
+    @if (Model.Product.categoryId == 2)
+    {
+        var typeOfDevice = Model.productProperties.FirstOrDefault(p => p.propertyName == "Rodzaj urządzenia");
+        var formatHD = Model.productProperties.FirstOrDefault(p => p.propertyName == "Format HD");
+        var screenDiagonal = Model.productProperties.FirstOrDefault(p => p.propertyName == "Przekątna ekranu");
+        var refreshRate = Model.productProperties.FirstOrDefault(p => p.propertyName == "Częstotliwość odświeżania");
+
+        @if (typeOfDevice.propertyParameters != null)
+        {
+            <p9>Rodzaj urządzenia <h9>@typeOfDevice.propertyParameters </h9></p9>
+        }
+        else
+        {
+
+        }
+
+        @if (formatHD.propertyParameters != null)
+        {
+            <p9>Format HD <h9>@formatHD.propertyParameters </h9></p9>
+        }
+        else
+        {
+
+        }
+        @if (screenDiagonal.propertyParameters != null)
+        {
+            <p9>Przekątna ekranu <h9>@screenDiagonal.propertyParameters </h9></p9>
+        }
+        else
+        {
+
+        }
+        @if (refreshRate.propertyParameters != null)
+        {
+            <p9>Częstotliwość odświeżania <h9>@refreshRate.propertyParameters </h9></p9>
+        }
+        else
+        {
+
+        }
+    }
     <a asp-controller="Cars" asp-action="CarDescription" asp-route-id="@Model.Product.Id" class="btn btn-link">Детальніше</a>
 
     <form asp-controller="ShopCart" asp-action="addToCart" method="post">

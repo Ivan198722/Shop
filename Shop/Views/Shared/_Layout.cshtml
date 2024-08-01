@@ -50,7 +50,7 @@
                             @foreach (var category in ViewBag.Menu)
                             {
                                 <li>
-                                    <a id="category-name" class="category-name nav-link d-flex align-items-center ms-2 pt-0" href="/Admin/ProductList?categoryId=@category.Category.Id">
+                                    <a id="category-name" class="category-name nav-link d-flex align-items-center ms-2 pt-0" href="/Products/List?categoryId=@category.Category.Id">
                                         @category.Category.name
                                     </a>
                                 </li>
@@ -98,6 +98,10 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="https://jqueryui.com/resources/demos/datepicker/i18n/datepicker-pl.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

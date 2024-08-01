@@ -1,21 +1,15 @@
-﻿@* <div class="row col-lg-8 mt-5 mb-2 align-items-end">
-    @if (Model.Products != null)
-    {
-        foreach (ProductDetails products in Model.Products)
+﻿   
+<div class="row justify-content-between">
+    <div class="row col-lg-2"></div>
+    <div class="row product-grid col-lg-9 mt-2 align-items-end">
+        @if (Model.Products != null)
         {
-            @Html.Partial("AllProducts", products)
+            foreach (ProductDetails products in Model.Products)
+            {
+                @Html.Partial("AllProducts", products)
 
+            }
         }
-    }
-    </div> *@
-
-<div class="row product-grid">
-    @if (Model.Products != null)
-    {
-        foreach (ProductDetails products in Model.Products)
-        {
-            @Html.Partial("AllProducts", products)
-
-        }
-    }
+    </div>
+  
 </div>
