@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop;
 
@@ -11,9 +12,11 @@ using Shop;
 namespace Shop.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240801171751_update_ShopCartItem")]
+    partial class update_ShopCartItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,7 +216,7 @@ namespace Shop.Migrations
                     b.Property<decimal>("price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("quantity")
+                    b.Property<int?>("quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("shortDescription")
@@ -286,27 +289,21 @@ namespace Shop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ShopCartId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("imagesId")
+                    b.Property<int>("ShopCartId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("productId")
-                        .HasColumnType("int");
 
                     b.Property<int>("quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("imagesId");
-
-                    b.HasIndex("productId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ShopCartItems");
                 });
@@ -403,21 +400,13 @@ namespace Shop.Migrations
 
             modelBuilder.Entity("Shop.Models.ShopCartItem", b =>
                 {
-                    b.HasOne("Shop.Models.Images", "images")
+                    b.HasOne("Shop.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("imagesId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shop.Models.Product", "product")
-                        .WithMany()
-                        .HasForeignKey("productId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("images");
-
-                    b.Navigation("product");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Shop.Models.Category", b =>

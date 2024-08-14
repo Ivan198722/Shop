@@ -10,7 +10,7 @@ namespace Shop.Controllers
         private readonly IAdminAllProducts _adminAllProducts;
         private readonly IAllProducts _AllProducts;
 
-        public ProductsController(IAdminAllProducts adminRepository, IAllProducts allProducts) : base(adminRepository)
+        public ProductsController(IAdminAllProducts adminRepository, IAllProducts allProducts, IAllShopCart allShopCart) : base(adminRepository, allShopCart)
         {
             _adminAllProducts = adminRepository;
             _AllProducts = allProducts;

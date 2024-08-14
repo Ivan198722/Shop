@@ -148,7 +148,9 @@
 
     <form asp-controller="ShopCart" asp-action="addToCart" method="post">
         <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-        <input type="hidden" name="id" value="@Model.Product.Id" />
+        <input type="hidden" name="productId" value="@Model.Product.Id" />
+        <input type="hidden" name="categoryId" value="@Model.Product.categoryId" />
+
         <input type="hidden" name="page" value="@ViewBag.CurrentPage" />
         <button type="submit" class="btn btn-primary">Додати до кошика</button>
     </form>

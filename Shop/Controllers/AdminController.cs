@@ -13,7 +13,7 @@ namespace Shop.Controllers
 
         
 
-        public AdminController( IAdminAllProducts adminRepository):base(adminRepository)
+        public AdminController( IAdminAllProducts adminRepository, IAllShopCart allShopCart):base(adminRepository, allShopCart)
         {
             _adminAllProducts = adminRepository;
         }

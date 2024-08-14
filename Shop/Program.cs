@@ -2,16 +2,27 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Shop;
 using Shop.Interfaces;
+using Shop.Models;
 using Shop.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+//builder.Services.AddDbContext<AppDBContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IAdminAllProducts, AdminRepository>();
 builder.Services.AddTransient<IAllProducts, ProductRepository>();
+builder.Services.AddTransient<IAllShopCart, ShopCartRepository>();
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ShopCart>(s => ShopCartRepository.GetCart(s));
 
 builder.Services.AddRazorPages();
 builder.Services.AddSession();

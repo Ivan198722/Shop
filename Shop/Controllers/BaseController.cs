@@ -10,10 +10,12 @@ namespace Shop.Controllers
     public class BaseController : Controller, IAsyncActionFilter
     {
         private readonly IAdminAllProducts _adminRepository;
+        private readonly IAllShopCart _allShopCart;
 
-        public BaseController(IAdminAllProducts adminRepository)
+        public BaseController(IAdminAllProducts adminRepository, IAllShopCart allShopCart)
         {
             _adminRepository = adminRepository;
+            _allShopCart = allShopCart;
         }
 
        
@@ -29,7 +31,9 @@ namespace Shop.Controllers
                 controller.ViewBag.Menu = categories;
             }
 
-            // Продолжаем выполнение следующего middleware в конвейере
+
+            ViewBag.ItemsCount = await GetCartItems();
+           
             await next();
         }
        
@@ -40,6 +44,12 @@ namespace Shop.Controllers
 
             return allCategories;
         }
-        
+
+        private async Task< int> GetCartItems()
+        {
+            var totalItemsCount = await _allShopCart.TotalItemsCountAsync();
+           
+            return  totalItemsCount;
+        }
     }
 }

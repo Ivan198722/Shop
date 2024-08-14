@@ -11,7 +11,7 @@ namespace Shop.Controllers
 
 
 
-        public HomeController(IAdminAllProducts adminRepository, IAllProducts allProducts) : base(adminRepository)
+        public HomeController(IAdminAllProducts adminRepository, IAllProducts allProducts, IAllShopCart allShopCart) : base(adminRepository, allShopCart)
         {
             _adminAllProducts = adminRepository;
             _AllProducts = allProducts;

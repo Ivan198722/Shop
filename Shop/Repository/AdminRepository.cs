@@ -93,7 +93,8 @@ namespace Shop.Repository
                 categoryId = categoryId,
                 addDate = DateTime.Now.Date,
                 isFavorited = true,
-                available = true
+                available = true,
+                quantity = 0
             };
 
             await _context.Products.AddAsync(newProduct);
@@ -673,10 +674,14 @@ namespace Shop.Repository
                     .Where(p => p.productId == productId)
                     .ToListAsync();
 
+                var shopCartItems = await _context.ShopCartItems
+                    .Where(it=>it.product.Id==productId)
+                    .ToListAsync();
               
                 _context.ProductProperties.RemoveRange(productProperties);
                 _context.Images.RemoveRange(images);
                 _context.ProductHighlights.RemoveRange(productHighlights);
+                _context.ShopCartItems.RemoveRange(shopCartItems);
 
                
                 _context.Products.Remove(product);

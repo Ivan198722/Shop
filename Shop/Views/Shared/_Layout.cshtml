@@ -30,9 +30,25 @@
                 
 
                 <div class=" m-1 p-0">
-                    <a class="nav-link p-0" href="#">
-                        <img src="\img\png-transparent-shopping-cart-icon-shopping-cart-black-design-trade-thumbnail (1) (2).png" />
-                    </a>
+                        <div class="cart-link position-relative">
+
+                            <div class="mt-2">
+                                <a class="nav-link p-0" href="/ShopCart/IndexShopCart/">
+                                    <img src="\img\png-transparent-shopping-cart-icon-shopping-cart-black-design-trade-thumbnail (1) (2).png" />
+                                </a>
+                            </div>
+                           
+
+                            @if (ViewBag.ItemsCount > 0)
+                            {
+                                <div class="mt-2 position-absolute bottom-50 start-50 translate-middle">
+                                  
+                                    <span class="badge bg-danger rounded-pill">@ViewBag.ItemsCount</span>
+                                </div>
+                            }
+                        
+
+                        </div>
                 </div>
              
             </div>

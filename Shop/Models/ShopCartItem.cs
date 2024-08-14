@@ -6,12 +6,16 @@ namespace Shop.Models
     {
         public int Id { get; set; }
 
-        public Product Product { get; set; }
+        public Product product { get; set; }
 
-        public int price { get; set; }
+        public decimal pricePerUnit { get; set; }
+
+        public decimal price { get; set; }
 
         public int quantity { get; set; }
         
         public string ShopCartId { get; set; }
+
+        public Images? images { get; set; }
     }
 }

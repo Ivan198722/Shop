@@ -18,7 +18,7 @@ namespace Shop.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-mm-dd}", ApplyFormatInEditMode = true)]
         public DateTime addDate { get; set; }
         
-        public int? quantity { get; set; }
+        public int quantity { get; set; }
 
         public string? shortDescription { get; set; }
 

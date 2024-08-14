@@ -1,0 +1,155 @@
+﻿
+
+
+<div class="container">
+    @if (Model.shopCart.ListShopItems.Count == 0)
+    {
+        <div class="alert alert-danger mt-3">
+            Nie dodałeś nic do koszyka
+        </div>
+    }
+    else
+    {
+
+        @foreach (var el in Model.shopCart.ListShopItems)
+        {
+            <div class="alert alert-warning mt-3 d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div>
+                     
+                        @if (el.images != null && el.images.img.Length > 0)
+                        {
+                            <img src="data:image;base64,@Convert.ToBase64String(el.images.img)" alt="@el.product.name" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />
+                        }
+                        else
+                        {
+                            <img src="\img\depositphotos_212631884-stock-photo-forbidden-camera-icon.jpg" alt="@el.product.name" style="max-width: 100px; max-height: 100px;" />
+                        }
+
+                    </div>
+                    <div class="mx-1"></div>
+                    <div>
+                        <b></b> @el.product.name <br />
+                        <b>Cena:</b> <span>@(el.product.price * el.quantity)<b>  PLN</b></span>
+                    </div>
+                </div>
+               
+                <div class="flex-column">
+
+                    <div class="d-flex align-items-center">
+
+
+                        @if(el.quantity>1)
+                        {
+                            <form asp-controller="ShopCart" asp-action="UpdateCartItem" method="post">
+                                <input type="hidden" name="productId" value="@el.product.Id" />
+                                <input type="hidden" name="action" value="decrement" />
+                                <button type="submit" class="btn btn-secondary">-</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <button id="delete-button" class="btn btn-secondary" data-product-id="@el.product.Id" >-</button>
+                        }
+
+
+
+                        <div class="mx-1"></div>
+                        <span >@el.quantity</span>
+                        <div class="mx-1"></div>
+
+                        <form asp-controller="ShopCart" asp-action="UpdateCartItem" method="post">
+                            <input type="hidden" name="productId" value="@el.product.Id" />
+                            <input type="hidden" name="action" value="increment" />
+                            <button type="submit" class="btn btn-secondary">+</button>
+                        </form>
+                        
+
+                        <div class="mx-1"></div> 
+
+
+                     
+                        <button id="delete-button" class="btn btn-danger rounded-pill px-3" data-product-id="@el.product.Id">
+                                <img src="\img\1017530.png" alt="Remove" style="width: 1.5em; height:auto;" />
+                            </button>
+                       
+                    </div>
+
+                    <div>
+
+                        @if (el.product.quantity >= 1)
+                        {
+                            <span>В наявності штук  @el.product.quantity  </span>
+                        }
+                        else
+                        {
+                            <span class="badge text-bg-danger rounded-pill">Немае в наявності </span>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+        <hr />
+        <div class="alert alert-warning mt-3">
+            <b>Razem:</b> <span>@Model.totalPrice <b> PLN</b></span>
+        </div>
+
+
+        <a class="btn btn-success rounded-pill px-3 @(Model.shopCart.ListShopItems.Count == 0 ? "disabled" : "")" asp-controller="Order" asp-action="Checkout">Złóż zamówienie</a>
+
+       
+    } 
+</div>
+
+<div class="modal" tabindex="-1" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" id="close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p style="color:red; font-weight: bold;">Czy na pewno chcesz usunąć ten towar z koszyka?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="cancel" class="btn btn-light" data-bs-dismiss="modal">Zostaw w koszyku</button>
+                <button type="button" id="yes" class="btn btn-danger">Tak, usuń</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+   
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('#delete-button').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const productId = this.getAttribute('data-product-id');
+
+                const alertDiv = document.querySelector('.modal');
+                alertDiv.style.display = 'block';
+
+                document.querySelector('#yes').addEventListener('click', function () {
+                    window.location.href = `/ShopCart/RemoveFromCart?productId=${productId}`;
+                });
+                document.querySelector('#cancel').addEventListener('click', function () {
+                    alertDiv.style.display = 'none';
+                });
+
+                document.querySelector('#close').addEventListener('click', function () {
+                    alertDiv.style.display = 'none';
+                });
+            });
+        });
+    });
+   
+</script>
+
+
+   
