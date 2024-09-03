@@ -8,8 +8,6 @@ namespace Shop.Models
 
         public Product product { get; set; }
 
-        public decimal pricePerUnit { get; set; }
-
         public decimal price { get; set; }
 
         public int quantity { get; set; }

@@ -3,6 +3,15 @@
     Layout = "~/Views/Shared/Admin_Layout.cshtml";
 }
 
+<style>
+    td{
+        border:none;
+        background-color:transparent;
+    }
+    button{
+        height:auto;
+    }
+</style>
 
 @foreach(var category in Model.Product)
 {
@@ -212,41 +221,83 @@
         </div>
         </div>
 
-      <div class="mt-4"></div>
+        <div class="mt-4"></div>
         <div class="d-flex align-items-start">
             <div class ="col-lg-5">
-            <h4>
-                Właściwości</h4>
-            <table >
-                <tbody>
+                <h4>
+                    Właściwości</h4>
+                <table >
+                    <tbody >
 
-                    @foreach (var property in category.productProperties)
-                    { <tr>
-                        <form id="editPropertyProductForm" asp-controller="Admin" asp-action="editPropertyProduct" method="post">
-                            <input type="hidden" name="productId" value="@product.Id">
-                            <input type="hidden" name="propertyName" value="@property.propertyName">
-                       
-                            <td style="border: none; background-color:transparent;" >
-                                @property.propertyName
-                            </td>
-                            <td style="border: none; background-color:transparent; ">
-                                <input type="text" id="propertyParameters" name="propertyParameters" style=" width: 100%; background-color: transparent;" value="@property.propertyParameters">
-                            </td>
+                   
 
-                             <td style="border:none; background-color:transparent;">
-                                    <button class="button-edit" type="submit" style="border:none;  background-color: transparent; padding: 0; cursor: pointer;">
-                                        <img src="\img\1000_F_338462346_wZZhUA9S6daekMfyuF8cBssJgj4nao8M (1) (1) (1).jpg" alt="edit" style=" background-color:transparent;"  />
-                                   
-                                </button>
-                            </td>
-                       
-                        </form>
+                        @{
+                            string nameProperty=null;
 
-                      </tr>
+                          
+
+                            @foreach (var property in category.productProperties)
+                        {
+
+                            
+                                <tr >
+                                    <td>
+                                        @if (nameProperty == null || nameProperty != property.propertyName)
+                                        {
+                                            @property.propertyName
+                                        }
+                                        else
+                                        {
+                                            
+                                        }
+                                    </td>
+                                   <td>
+
+
+                                        <form id="editPropertyProductForm" asp-controller="Admin" asp-action="editPropertyProduct" method="post" style="display: flex; align-items: center;">
+                                     <input type="hidden" name="productId" value="@product.Id">
+                                        <input type="hidden" name="propertyId" value="@property.Id">
+                                            <input type="hidden" name="propertyName" value="@property.propertyName" />
+                                            <input type="text" id="propertyParameters" name="propertyParameters" value="@property.propertyParameters"
+                                    style="width: 100%; background-color: transparent; border:none; display:inline-block; margin-right:5px;"
+                                                   onfocus="showAddForm('@property.propertyName')">
+                                                  
+                                            <button class="button-edit" type="submit"  style="border:none; background-color: transparent; padding: 0; display:inline-block; cursor: pointer;">
+                                                <img src="\img\1000_F_338462346_wZZhUA9S6daekMfyuF8cBssJgj4nao8M (1) (1) (1).jpg" alt="edit" style="background-color:transparent;" />
+                                            </button>
+                                    </form>
+
+                                        @if (category.productProperties.IndexOf(property) == category.productProperties.Count - 1 || property.propertyName != category.productProperties[category.productProperties.IndexOf(property) + 1].propertyName)
+                                        {
+                                            <form id="addPropertyProductForm_@property.propertyName" asp-controller="Admin" asp-action="addPropertyProduct" method="post" style=" display: none; flex; align-items: center;">
+                                                <input type="hidden" name="productId" value="@product.Id">
+                                                <input type="hidden" name="propertyName" value="@property.propertyName">
+                                                <input type="hidden" name="categoryId" value="@product.categoryId">
+                                                <input type="text" id="addPropertyParameters" name="addPropertyParameters" style="width: auto; background-color: transparent; display:inline-block; margin-right:5px;">
+
+                                                <button class="button-edit" type="submit"  style="border:none; background-color: transparent; padding: 0; cursor: pointer;  display:inline-block; ">
+                                                    <img src="\img\pngtree-vector-add-icon-png-image_956621 (1) (1).jpg" alt="edit" style="background-color:transparent;" />
+                                                </button>
+                                                </form>
+                                        }
+                                        else
+                                        {
+
+                                        }
+
+                                   </td>
+
+                                </tr>
+
+                                nameProperty = property.propertyName;
+                            }
+                        }
                         
-                    }
+
+                       
                 </tbody>
-            </table>
+                </table>
+               
         </div>
         <div class="m-4"></div>
 
@@ -299,7 +350,7 @@
                     <input type="hidden" name="productId" value="@product.Id" />
                     <div class="flex-column">
                         <input type="hidden" id="textProductShortDescription" name="shortDescription" value="@product.shortDescription">
-                        <textarea class="flex-column" id="editDescriptionField" name="newShortDescription" style="width: 100%; " oninput="autoResize(this)">@product.shortDescription</textarea>
+                        <textarea class="flex-column" id="editShortDescriptionField" name="newShortDescription" style="width: 100%; " oninput="autoResize(this)">@product.shortDescription</textarea>
                     </div>
                     <div class="end-0" >
                         <button type="submit" id="saveDescriptionButton-" class="button-edit btn btn-info square-button" style="width: 15%; border: none; ">
@@ -319,8 +370,8 @@
                 <form id="editProductLongDescription" asp-controller="Admin" asp-action="EditProductLongDescription" method="post">
                     <input type="hidden" name="productId" value="@product.Id" />
                     <div class="flex-column"  >
-                        <input type="hidden" id="textProductShortDescription" name="shortDescription" value="@product.longDescription">
-                        <textarea class="flex-column" id="editDescriptionField" name="newLongDescription" style="width: 100%; height:300px; ">@product.longDescription</textarea>
+                        <input type="hidden" id="textProductLongDescription" name="longDescription" value="@product.longDescription">
+                        <textarea class="flex-column" id="editLongDescriptionField" name="newLongDescription" style="width: 100%; height:400px; ">@product.longDescription</textarea>
 
                     </div>
                     <div class="mt-1"></div>
@@ -368,29 +419,57 @@
    }
 }
 
+<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 
        <script>
+
+    function showAddForm(propertyName) {
+        // Показать форму addPropertyProductForm для соответствующего свойства
+        var addForm = document.getElementById('addPropertyProductForm_' + propertyName);
+        if (addForm) {
+            addForm.style.display = 'flex';
+        }
+    }
+
+    // function updateHiddenInput(propertyName) {
+    //     // Находим текстовый инпут и скрытый инпут по уникальному ID
+    //     let textInput = document.getElementById('propertyParameters_' + propertyName);
+    //     let hiddenInput = document.getElementById('hiddenPropertyParameters_' + propertyName);
+
+    //     let textInput1 = document.getElementById('addPropertyParameters_' + propertyName);
+    //     let hiddenInput1 = document.getElementById('hiddenAddPropertyParameters_' + propertyName);
+
+    //     // Копируем значение из текстового инпута в скрытый инпут
+    //     hiddenInput.value = textInput.value;
+    //     hiddenInput1.value = textInput1.value;
+    // }
+
+    CKEDITOR.replace('editShortDescriptionField');
+
+    CKEDITOR.replace('editLongDescriptionField');
+
+
     document.addEventListener('DOMContentLoaded', function () {
-        // Функция для установки фокуса на кнопку
+        
         function buttonFocus(event) {
             event.target.focus();
         }
 
-        // Устанавливаем фокус на кнопку перед отправкой формы
+        
         document.querySelectorAll('.button-edit').forEach(button => {
             button.addEventListener('click', buttonFocus);
         });
 
-        // Восстанавливаем положение прокрутки при загрузке страницы
+        
         function restoreScrollPosition() {
             const scrollPosition = localStorage.getItem('scrollPosition');
             if (scrollPosition !== null) {
                 window.scrollTo(0, parseInt(scrollPosition, 10));
-                localStorage.removeItem('scrollPosition'); // Удаляем сохраненное значение после использования
+                localStorage.removeItem('scrollPosition'); 
             }
         }
 
-        // Сохраняем положение прокрутки перед отправкой формы
+        
         function saveScrollPosition() {
             localStorage.setItem('scrollPosition', window.scrollY);
         }
@@ -403,47 +482,6 @@
     });
 
    
-    // function buttonFocus() {
-    //     const buttons = document.querySelectorAll('.button-edit');
-    //     buttons.forEach(button => {
-    //         button.focus();
-    //     });
-    // }
-
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     // Восстанавливаем фокус на кнопке при загрузке страницы
-    //     window.onload = buttonFocus;
-
-    //     // Устанавливаем фокус на кнопку перед отправкой формы
-    //     document.querySelectorAll('.button-edit').forEach(button => {
-    //         button.addEventListener('click', buttonFocus);
-    //     });
-    // });
-
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     // Функция для сохранения положения прокрутки
-    //     function saveScrollPosition() {
-    //         localStorage.setItem('scrollPosition', window.scrollY);
-    //     }
-
-    //     // Функция для восстановления положения прокрутки
-    //     function restoreScrollPosition() {
-    //         const scrollPosition = localStorage.getItem('scrollPosition');
-    //         if (scrollPosition !== null) {
-    //             window.scrollTo(0, parseInt(scrollPosition, 10));
-    //             localStorage.removeItem('scrollPosition'); // Удаляем сохраненное значение после использования
-    //         }
-    //     }
-
-    //     // Восстанавливаем положение прокрутки при загрузке страницы
-    //     window.onload = restoreScrollPosition;
-
-    //     // Сохраняем положение прокрутки перед отправкой формы
-    //     document.querySelectorAll('.button-edit').forEach(button => {
-    //         button.addEventListener('click', saveScrollPosition);
-    //     });
-
-    // });
 
     function addNewPrice() {
         const price = document.querySelector('#newProductPrice');
@@ -474,5 +512,6 @@
         });
     });
 
+   
        </script>
                      

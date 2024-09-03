@@ -1,0 +1,210 @@
+﻿@{
+    Layout = "~/Views/Shared/Order_Layout.cshtml";
+}
+
+
+<div class="row col-md-3 mt-3">
+    <h3>Dane odbiorcy</h3>
+
+    <div class="d-flex align-items-center">
+        <span class="me-2">@Model.OrderCustomer.name </span><span>@Model.OrderCustomer.surname </span>
+         
+        
+    </div>
+    <div class="mt-1"></div>
+    
+    <div class=" d-flex align-items-center">
+        <span class="me-2">@Model.OrderCustomer.street </span>
+        
+        <span>@Model.OrderCustomer.NumberHouse</span>
+        @if (Model.OrderCustomer.NumberFlat != null) 
+        {
+        
+            <span>/@Model.OrderCustomer.NumberFlat </span>
+        }
+        else
+        {
+            
+        }
+
+      
+    </div>
+    
+    <div class="mt-1"></div>
+    <div class=" d-flex align-items-center">
+        <span class="me-2">@Model.OrderCustomer.city </span>
+        <span>@Model.OrderCustomer.postcode </span>
+    </div>
+   
+    
+    <div class="mt-1"></div>
+    <div >
+        <span>@Model.OrderCustomer.phone </span>
+        </div>
+   
+</div>
+
+<div class="mt-5 col-lg-6">
+    @foreach (var el in Model.ShopCart.ListShopItems)
+    {
+         <form asp-controller="Products" asp-action="ProductDescription" method="post">
+            <input type="hidden" name="productId" value="@el.product.Id" />
+            <input type="hidden" name="categoryId" value="@el.product.categoryId" />
+
+            <button type="submit" style="border: none; background: none; padding: 0; width: 100%; text-align: left;">
+        <div class="alert alert-warning mt-3 d-flex justify-content-md-start">
+            <div class="d-flex align-content-between">
+                <div class="">
+
+                    @if (el.images != null && el.images.img.Length > 0)
+                    {
+                        <img src="data:image;base64,@Convert.ToBase64String(el.images.img)" alt="@el.product.name" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />
+                    }
+                    else
+                    {
+                        <img src="\img\depositphotos_212631884-stock-photo-forbidden-camera-icon.jpg" alt="@el.product.name" style="max-width: 100px; max-height: 100px;" />
+                    }
+
+                </div>
+                <div class="mx-1"></div>
+                <div>
+                    <b> @el.product.name </b>
+                    <div class="d-flex justify-content-between">
+                        <div><span>@el.quantity<span> x </span>@el.product.price</span> </div>
+
+                        <div> <span>@(el.product.price * el.quantity)<b>  PLN</b></span></div>
+                    </div>
+                    
+                </div>
+            </div>
+
+           
+        </div>
+        </form>
+    }
+
+    <div class=" d-flex justify-content-end">
+        <b>@Model.totalPrice PLN</b>
+    </div>
+
+</div>
+
+<div class="mt-5 col-lg-6">
+    <h4>Płatność kartą</h4>
+    <p class="text-danger mt-3">
+        Uwaga: Ta płatność jest tylko symulacją. Proszę nie wprowadzać prawdziwych danych karty.
+    </p>
+    <form id="payForm" asp-controller="Order" asp-action="CompleteOrder" method="post">
+        <input type="hidden" name="customerId" value="@Model.OrderCustomer.Id" />
+        <input type="hidden" name="email" value="@Model.OrderCustomer.email" />
+        <input type="hidden" name="name" value="@Model.OrderCustomer.name" />
+        <input type="hidden" name="surname" value="@Model.OrderCustomer.surname" />
+        <input type="hidden" name="city" value="@Model.OrderCustomer.city" />
+        <input type="hidden" name="postcode" value="@Model.OrderCustomer.postcode" />
+        <input type="hidden" name="street" value="@Model.OrderCustomer.street" />
+        <input type="hidden" name="numberHouse" value="@Model.OrderCustomer.NumberHouse" />
+        <input type="hidden" name="numberFlat" value="@Model.OrderCustomer.NumberFlat" />
+        <input type="hidden" name="phone" value="@Model.OrderCustomer.phone" />
+
+        <div class="form-group">
+            <label for="cardNumber">Numer karty</label>
+            <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+            <span id="numberError" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="cardExpiry">Data ważności (MM/YY)</label>
+            <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY" maxlength="5">
+            <span id="expiryError" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="cardHolder">Imię</label>
+            <input type="text" class="form-control" id="cardHolder" placeholder="Imię Nazwiśko">
+            <span id="nameError" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="cvv">CVV</label>
+            <input type="password" class="form-control" id="cvv" placeholder="CVV" maxlength="3">
+            <span id="cvvError" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Do zapłaty</button>
+    </form>
+</div>
+
+
+<script src="https://unpkg.com/imask"></script>
+        <script>
+    let cartNumber = document.querySelector('#cardNumber')
+    let cardExpiry = document.querySelector('#cardExpiry')
+    let cardHolder = document.querySelector('#cardHolder');
+    let cvv = document.querySelector('#cvv');
+
+    function showError(input, message) {
+        const errorSpan = input.nextElementSibling;
+        input.classList.add('is-invalid');
+        if (errorSpan) {
+            errorSpan.textContent = message;
+        }
+    }
+
+    function clearError(input) {
+        const errorSpan = input.nextElementSibling;
+        input.classList.remove('is-invalid');
+        if (errorSpan) {
+            errorSpan.textContent = '';
+        }
+    }
+
+    function validateMaskLength(input, requiredLength, message) {
+        if (input.value.length < requiredLength) { 
+            showError(input, message);
+            return false;
+        } else {
+            clearError(input);
+            return true;
+        }
+    }
+
+    function validateName(input) {
+        const nameRegex = /^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ]+\s+[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/;
+        if (!nameRegex.test(input.value)) {
+            showError(input, '');
+            return false;
+        } else {
+            clearError(input);
+            return true;
+        }
+    }
+
+    function validateCVV(input) {
+        const cvvRegex = /^[0-9]{3}$/;
+        if (!cvvRegex.test(input.value)) {
+            showError(input, '');
+            return false;
+        } else {
+            clearError(input);
+            return true;
+        }
+    }
+
+    document.getElementById('payForm').addEventListener('submit', function (event) {
+        const isCardNumberValid = validateMaskLength(cardNumber, 19, '');
+        const isExpiryValid = validateMaskLength(cardExpiry, 5, '');
+        const isNameValid = validateName(cardHolder);
+        const isCVVValid = validateCVV(cvv);
+
+        if (!isCardNumberValid || !isExpiryValid || !isNameValid || !isCVVValid) {
+            event.preventDefault();
+        }
+    });
+
+
+    
+    new IMask(cartNumber, {
+        mask: '0000 0000 0000 0000'  
+    });
+
+    
+    new IMask(cartExpiry, {
+        mask: '00/00'  
+    });
+        </script>

@@ -78,7 +78,7 @@ namespace Shop.Repository
                     ShopCartId = _shopCart.ShopCartId,
                     product = product,
                     quantity = 1,
-                    pricePerUnit = product.price,
+                   
                     price = product.price,
                     images = image
                 };

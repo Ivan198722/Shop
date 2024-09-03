@@ -45,7 +45,9 @@ namespace Shop.Interfaces
 
         Task ChangeIsFavorited(int productId, bool isFavorited);
 
-        Task EditPropertyProduct(int productId, string propertyName, string propertyParameters);
+        Task EditPropertyProduct(int productId, int propertyId, string propertyName, string propertyParameters);
+
+        Task AddPropertyProduct(int categoryId, int productId, string propertyName, string propertyParameters);
 
         Task EditHighlights(int productId, string newHighlights, string highlights);
 

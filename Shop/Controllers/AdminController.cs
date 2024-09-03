@@ -189,9 +189,15 @@ namespace Shop.Controllers
             return RedirectToAction("EditProduct", new { productId = productId });
         }
 
-        public async Task<ActionResult> editPropertyProduct(int productId, string propertyName, string propertyParameters)
+        public async Task<ActionResult> editPropertyProduct(int productId, int propertyId, string propertyName, string propertyParameters)
         {
-            await _adminAllProducts.EditPropertyProduct(productId, propertyName, propertyParameters);
+            await _adminAllProducts.EditPropertyProduct(productId, propertyId, propertyName, propertyParameters);
+            return RedirectToAction("EditProduct", new { productId = productId });
+        }
+
+        public async Task<ActionResult> addPropertyProduct(int categoryId, int productId, string propertyName, string addPropertyParameters)
+        {
+            await _adminAllProducts.AddPropertyProduct(categoryId, productId, propertyName, addPropertyParameters);
             return RedirectToAction("EditProduct", new { productId = productId });
         }
 

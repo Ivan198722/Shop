@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
 
-        public int customerId { get; set; }
+        public int orderId { get; set; }
 
         public int productID { get; set; }
 
@@ -14,6 +14,6 @@
 
         public virtual Product Product { get; set; }
 
-        public virtual Customer Customer { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

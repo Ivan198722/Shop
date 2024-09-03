@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop;
 
@@ -11,9 +12,11 @@ using Shop;
 namespace Shop.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240822092838_add_orders")]
+    partial class add_orders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,8 +110,7 @@ namespace Shop.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("orderId")
-                        .IsUnique();
+                    b.HasIndex("orderId");
 
                     b.ToTable("FinishedOrders");
                 });
@@ -145,19 +147,18 @@ namespace Shop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int>("customerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("OrderTime")
+                    b.Property<DateTime>("orderTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("PaymentStatus")
+                    b.Property<bool>("paymentStatus")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
+                    b.HasIndex("customerId");
 
                     b.ToTable("Orders");
                 });
@@ -329,8 +330,8 @@ namespace Shop.Migrations
             modelBuilder.Entity("Shop.Models.FinishedOrder", b =>
                 {
                     b.HasOne("Shop.Models.Order", "Order")
-                        .WithOne("FinishedOrder")
-                        .HasForeignKey("Shop.Models.FinishedOrder", "orderId")
+                        .WithMany()
+                        .HasForeignKey("orderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -351,8 +352,8 @@ namespace Shop.Migrations
             modelBuilder.Entity("Shop.Models.Order", b =>
                 {
                     b.HasOne("Shop.Models.Customer", "Customer")
-                        .WithOne("Order")
-                        .HasForeignKey("Shop.Models.Order", "CustomerId")
+                        .WithMany()
+                        .HasForeignKey("customerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -362,7 +363,7 @@ namespace Shop.Migrations
             modelBuilder.Entity("Shop.Models.OrderDetail", b =>
                 {
                     b.HasOne("Shop.Models.Order", "Order")
-                        .WithMany("OrderDetails")
+                        .WithMany("orderDetails")
                         .HasForeignKey("orderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -443,18 +444,9 @@ namespace Shop.Migrations
                     b.Navigation("products");
                 });
 
-            modelBuilder.Entity("Shop.Models.Customer", b =>
-                {
-                    b.Navigation("Order")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Shop.Models.Order", b =>
                 {
-                    b.Navigation("FinishedOrder")
-                        .IsRequired();
-
-                    b.Navigation("OrderDetails");
+                    b.Navigation("orderDetails");
                 });
 
             modelBuilder.Entity("Shop.Models.Product", b =>

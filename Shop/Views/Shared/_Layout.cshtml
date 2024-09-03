@@ -15,6 +15,16 @@
             #category-name {
                 color: brown;
             }
+
+        .content-container {
+           
+            
+           
+            max-width: 100vw; 
+            overflow-x: hidden;
+        }
+
+       
     </style>
 </head>
 <body>
@@ -37,15 +47,15 @@
                                     <img src="\img\png-transparent-shopping-cart-icon-shopping-cart-black-design-trade-thumbnail (1) (2).png" />
                                 </a>
                             </div>
-                           
 
-                            @if (ViewBag.ItemsCount > 0)
-                            {
-                                <div class="mt-2 position-absolute bottom-50 start-50 translate-middle">
-                                  
-                                    <span class="badge bg-danger rounded-pill">@ViewBag.ItemsCount</span>
+
+                                 <div class="mt-2 position-absolute bottom-50 start-50 translate-middle">
+
+                                    <span id="cartItemsCount" class="badge bg-danger rounded-pill" >@ViewBag.ItemsCount </span>
                                 </div>
-                            }
+                            
+                           
+                            
                         
 
                         </div>
@@ -73,20 +83,7 @@
                             }
                             
                         </ul>
-                       @*  <ul class="navbar-nav flex-grow-1 justify-content-between">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <svg class="bi" width="24" height="24"><use xlink:href="#aperture"></use></svg>
-                                </a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" href="#">Tour</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Product</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Enterprise</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
-
-                        </ul> *@
+                       
                     </div>
 
                     <div class="ms-auto">
@@ -100,7 +97,7 @@
         
        
     </header>
-    <div class="container">
+    <div class="content-container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -119,5 +116,37 @@
 
     <script src="https://jqueryui.com/resources/demos/datepicker/i18n/datepicker-pl.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    
+    <script>
+       
+
+
+        $(document).ready(function () {
+        
+        $('form.addToCartForm').on('submit', function (event) {
+            event.preventDefault(); 
+
+            var form = $(this);
+            var url = form.attr('action');
+            var formData = form.serialize(); // Сериализация данных формы для отправки через AJAX
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: formData,
+                success: function (response) {
+
+                    
+                    
+                    $('#cartItemsCount').text(response.itemsCount);
+                },
+                error: function (xhr, status, error) {
+                    console.error('', error);
+                }
+            });
+        });
+    });
+        
+    </script>
 </body>
 </html>

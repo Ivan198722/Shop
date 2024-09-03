@@ -51,5 +51,13 @@ namespace Shop.Controllers
            
             return  totalItemsCount;
         }
+
+        // Новый метод для получения количества товаров в корзине в формате JSON
+        [HttpGet]
+        public async Task<IActionResult> GetCartItemsCount()
+        {
+            int itemsCount = await GetCartItems();
+            return Json(new { itemsCount });
+        }
     }
 }

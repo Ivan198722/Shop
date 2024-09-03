@@ -348,6 +348,7 @@ namespace Shop.Repository
         {
             return await _context.ProductProperties
                 .Where(im=>im.productId==productId)
+                .OrderBy(p=>p.propertyName)
                 .ToListAsync () ;
         }
 
@@ -535,20 +536,48 @@ namespace Shop.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task EditPropertyProduct (int productId, string propertyName, string propertyParameters)
+        public async Task EditPropertyProduct (int productId, int propertyId, string propertyName, string propertyParameters)
         {
            var productProperty = await _context.ProductProperties
-                .Where(p=>p.productId== productId&&p.propertyName==propertyName)
+                .Where(p=>p.Id==propertyId)
                 .FirstOrDefaultAsync();
 
-           
+           if(string.IsNullOrEmpty(propertyParameters))
+           {
+                var existPropertyName = await _context.ProductProperties
+                    .Where(p=>p.productId==productId&&p.propertyName == propertyName)
+                    .ToListAsync();
 
-            if (productProperty != null)
+                if(existPropertyName.Count() > 1) 
+                {
+                  _context.ProductProperties.Remove(productProperty);
+                }
+           }
+
+          else  if (productProperty != null)
             {
                 productProperty.propertyParameters = propertyParameters;
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task AddPropertyProduct(int categoryId, int productId, string propertyName, string propertyParameters)
+
+        {
+            if (!string.IsNullOrEmpty(propertyParameters))
+            {
+                await _context.ProductProperties.AddAsync(new ProductProperties
+                {
+                    categoryId = categoryId,
+                    productId = productId,
+                    propertyName = propertyName,
+                    propertyParameters = propertyParameters
+
+                });
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task EditHighlights(int productId, string newHighlights, string highlights)

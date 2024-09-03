@@ -28,6 +28,8 @@ namespace Shop
 
         public DbSet<FinishedOrder> FinishedOrders { get; set; }
 
+        public DbSet<Order> Orders { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

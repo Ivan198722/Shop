@@ -1,0 +1,191 @@
+﻿@{
+    Layout = "~/Views/Shared/Order_Layout.cshtml";
+}
+
+
+<div class="row col-lg-6">
+   
+
+    
+    <form id="formCheckEmail" asp-controller="Order" asp-action="CheckEmail" >
+        <div class="d-flex justify-content-between col-lg-12">
+            <div class="form-group col-md-7">
+                <label for="email">adres e-mail</label>
+                <div>
+                    <input id="email" class="form-control" name="email"  />
+                    <span id="emailError" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="mt-4"></div>
+
+   
+    <form id="checkoutForm" method="post" class="form-horizontal">
+        <div class="d-flex justify-content-between col-lg-12">
+            <div class="form-group col-md-5">
+                <label for="name">Imię</label>
+                <div>
+                    <input id="name" class="form-control"  disabled />
+                    <span id="nameError" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-5">
+                <label for="surname">Nazwisko</label>
+                <div>
+                    <input id="surname" class="form-control"  disabled />
+                    <span id="surnameError" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2"></div>
+
+        <div class="d-flex justify-content-between col-lg-9">
+            <div class="form-group col-md-5">
+                <label for="city">miejscowość</label>
+                <div>
+                    <input id="city" class="form-control" disabled />
+                    <span id="cityError" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="postcode">kod pocztowy</label>
+                <div>
+                    <input id="postcode" class="form-control"  disabled />
+                    <span id="postcodeError" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2"></div>
+
+        <div class="d-flex justify-content-between col-lg-8">
+            <div class="form-group col-md-5">
+                <label for="street">ulica</label>
+                <div>
+                    <input id="street" class="form-control"  disabled />
+                    <span id="streetError" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <label for="numberHouse">nr dom</label>
+                <div>
+                    <input id="numberHouse" class="form-control"  disabled />
+                    <span id="numberError" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <label for="numberFlat">nr lokalu</label>
+                <div>
+                    <input id="numberFlat" class="form-control" disabled />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">nr telefonu</label>
+            <div class="col-md-5">
+                <div class="d-flex align-items-center">
+                    <span>+48</span>
+                    <div class="me-2"></div>
+                    <input id="phone" type="tel" class="form-control"  disabled />
+                    <span id="phoneError" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2"></div>
+        <div class="col-md-3">
+            <input class="btn btn-success" type="submit" value="Do kasy" disabled />
+        </div>
+    </form>
+</div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const emailInput = document.getElementById('email');
+        
+        const formCheckEmail = document.getElementById('formCheckEmail');
+       
+
+        // Функции для отображения ошибок
+        function showError(input, message) {
+            const errorSpan = input.nextElementSibling;
+            input.classList.add('is-invalid');
+            if (errorSpan) {
+                errorSpan.textContent = message;
+            }
+        }
+
+        function clearError(input) {
+            const errorSpan = input.nextElementSibling;
+            input.classList.remove('is-invalid');
+            if (errorSpan) {
+                errorSpan.textContent = '';
+            }
+        }
+
+        // Функция для валидации email
+        function validateEmail(email) {
+            const emailPattern = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+            return emailPattern.test(email);
+        }
+
+
+        // Слушатель события нажатия клавиши в поле email
+        emailInput.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();  
+                checkEmailAndSubmit();
+            }
+        });
+
+        // Слушатель события выхода из поля email
+        emailInput.addEventListener('blur', function () {
+            checkEmailAndSubmit();
+        });
+
+        // Слушатель изменения на остальных полях
+        checkoutFormInputs.forEach(input => {
+            input.addEventListener('focus', function () {
+                if (!validateEmail(emailInput.value)) {
+                    emailInput.classList.add('is-invalid');
+                    emailError.textContent = 'email.';
+
+                    // Отменяем действие, если email некорректный
+                    input.blur();
+                }
+            });
+        });
+
+        
+
+        // Функция для проверки email и отправки формы
+        function checkEmailAndSubmit() {
+            if (validateEmail(emailInput.value)) {
+                emailInput.classList.remove('is-invalid');
+                emailError.textContent = '';
+
+               
+                // Отправляем форму для проверки email
+                formCheckEmail.submit();
+
+               
+            } else {
+                emailInput.classList.add('is-invalid');
+                emailError.textContent = 'email.';
+
+            }
+        }
+       
+    });
+
+
+</script>

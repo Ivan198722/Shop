@@ -73,5 +73,15 @@ namespace Shop.Controllers
                     priceFrom, priceTo, selectedHighlights });
           
         }
+
+        public async Task<IActionResult> ProductDescription(int productId, int categoryId)
+        {
+            var product = await _adminAllProducts.EditProduct(productId, categoryId);
+
+            var viewModel = new ProductsViewModel {ProductInfos=product};
+
+            return View(viewModel);
+
+        }
     }
 }

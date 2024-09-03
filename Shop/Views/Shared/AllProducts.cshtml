@@ -15,6 +15,13 @@
 
 </style>
 <div class="product-card ">
+
+     <form asp-controller="Products" asp-action="ProductDescription" method="post">
+        <input type="hidden" name="productId" value="@Model.Product.Id" />
+        <input type="hidden" name="categoryId" value="@Model.Product.categoryId" />
+
+        <button type="submit" style="border: none; background: none; padding: 0; width: 100%; text-align: left;">
+
     @if (Model.images != null && Model.images.Any())
     {
         var firstPicture = Model.images.FirstOrDefault(); 
@@ -42,7 +49,9 @@
     <h2 class="product-name">@Model.Product.name</h2>
 
     <p class="product-price"> @(Model.Product.price != null ? $"{Model.Product.price} PLN" : "No price")</p>
-   
+
+    
+    </form>
     @if (Model.Product.categoryId == 1)
     {
         var propertyScreenCale = Model.productProperties.FirstOrDefault(p => p.propertyName == "Przekątna ekranu (cale)");
@@ -143,15 +152,29 @@
         {
 
         }
-    }
-    <a asp-controller="Cars" asp-action="CarDescription" asp-route-id="@Model.Product.Id" class="btn btn-link">Детальніше</a>
+    } 
 
-    <form asp-controller="ShopCart" asp-action="addToCart" method="post">
+
+    @* <form asp-controller="Products" asp-action="ProductDescription" method="post">
+        <input type="hidden" name="productId" value="@Model.Product.Id" />
+        <input type="hidden" name="categoryId" value="@Model.Product.categoryId" />
+    <button type="submit" class="btn btn-link">Детальніше</button> 
+
+    </form>
+ *@
+    @if (Model.Product.quantity>=1&&Model.Product.available==true)
+    {
+        <form class="addToCartForm" asp-controller="ShopCart" asp-action="addToCart" method="post">
         <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
         <input type="hidden" name="productId" value="@Model.Product.Id" />
         <input type="hidden" name="categoryId" value="@Model.Product.categoryId" />
 
         <input type="hidden" name="page" value="@ViewBag.CurrentPage" />
-        <button type="submit" class="btn btn-primary">Додати до кошика</button>
-    </form>
+        <button type="submit" class="btn btn-primary">DODAJ DO KOSZYKA</button>
+        </form>
+    }
+    else
+    {
+        <p4 style="color:red;">niedostępny</p4>
+    }
 </div>

@@ -19,5 +19,7 @@ namespace Shop.ViewModels
         public IEnumerable<PropertyInfo> UniqueProperty { get; set; }
 
         public IEnumerable <ProductProperties> PropertyParameters { get; set; }
+
+        public IEnumerable<ProductInfo> ProductInfos { get; set; }
     }
 }

@@ -249,28 +249,26 @@
     });
 
 
-    // document.addEventListener('DOMContentLoaded', function () {
-    // const arrows = document.querySelectorAll('.arrow');
-    // arrows.forEach(arrow => {
-    //     arrow.addEventListener('click', function () {
-    //        // const ul = document.querySelectorAll('ul')
-    //         const ul = this.parentElement.nextElementSibling;
-    //         if (ul.classList.contains('hidden')) {
-    //             ul.classList.remove('hidden');
-    //             this.classList.add('rotate');
-    //         } else {
-    //             ul.classList.add('hidden');
-    //             this.classList.remove('rotate');
-    //         }
-    //     });
-    // });
+    document.addEventListener('DOMContentLoaded', function () {
+        const forms = document.querySelectorAll('form');
 
-    // // Automatically expand lists with checked checkboxes
-    // document.querySelectorAll('ul').forEach(ul => {
-    //     if (ul.querySelector('input[type="checkbox"]:checked')) {
-    //         ul.classList.remove('hidden');
-    //         ul.previousElementSibling.querySelector('.arrow').classList.add('rotate');
-    //     }
-    // });
-    //     });
+        // Функция для сохранения позиции прокрутки
+        const saveScrollPosition = () => {
+            localStorage.setItem('scrollPosition', window.scrollY);
+        };
+
+        // При каждом отправлении формы, сохраняем позицию прокрутки
+        forms.forEach(form => {
+            form.addEventListener('submit', saveScrollPosition);
+        });
+
+        // Восстановление позиции прокрутки после перезагрузки страницы
+        const scrollPosition = localStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+            window.scrollTo(0, parseInt(scrollPosition, 10));
+            // Удаляем сохраненную позицию из localStorage
+            localStorage.removeItem('scrollPosition');
+        }
+    });
+
 </script>

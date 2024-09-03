@@ -20,6 +20,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IAdminAllProducts, AdminRepository>();
 builder.Services.AddTransient<IAllProducts, ProductRepository>();
 builder.Services.AddTransient<IAllShopCart, ShopCartRepository>();
+builder.Services.AddTransient<IAllOrders, OrderRepository>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ShopCart>(s => ShopCartRepository.GetCart(s));

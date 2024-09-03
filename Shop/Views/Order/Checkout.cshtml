@@ -1,0 +1,214 @@
+﻿@{
+    Layout = "~/Views/Shared/Order_Layout.cshtml";
+}
+
+
+<div class="row col-lg-6">
+   
+
+   
+    <form id="checkoutForm" asp-controller="Order" asp-action="Order">
+        <div class="d-flex justify-content-between col-lg-12">
+            <div class="form-group col-md-7">
+                <label for="email">adres e-mail</label>
+                <div>
+                    <input id="email" class="form-control" name="email" value="@Model.Email" />
+                    <span id="emailError" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    
+
+    <div class="mt-4"></div>
+
+  
+   
+        <div class="d-flex justify-content-between col-lg-12">
+            <div class="form-group col-md-5">
+                <label for="name">Imię</label>
+                <div>
+                    <input id="name" class="form-control" name="name" value="@Model.Customer?.name"  />
+                    <span id="nameError" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-5">
+                <label for="surname">Nazwisko</label>
+                <div>
+                    <input id="surname" class="form-control" name="surname" value="@Model.Customer?.surname"  />
+                    <span id="surnameError" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2"></div>
+
+        <div class="d-flex justify-content-between col-lg-9">
+            <div class="form-group col-md-5">
+                <label for="city">miejscowość</label>
+                <div>
+                    <input id="city" class="form-control" name="city" value="@Model.Customer?.city" />
+                    <span id="cityError" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="postcode">kod pocztowy</label>
+                <div>
+                    <input id="postcode" class="form-control" name="postcode" value="@Model.Customer?.postcode" placeholder="00-000" />
+                    <span id="postcodeError" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2"></div>
+
+        <div class="d-flex justify-content-between col-lg-8">
+            <div class="form-group col-md-5">
+                <label for="street">ulica</label>
+                <div>
+                    <input id="street" class="form-control" name="street" value="@Model.Customer?.street"  />
+                    <span id="streetError" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <label for="numberHouse">nr dom</label>
+                <div>
+                    <input id="numberHouse" class="form-control" name="numberhouse" value="@Model.Customer?.NumberHouse" />
+                    <span id="numberError" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-md-2">
+                <label for="numberFlat">nr lokalu</label>
+                <div>
+                    <input id="numberFlat" class="form-control" name="numberFlat" value="@Model.Customer?.NumberFlat" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">nr telefonu</label>
+            <div class="col-md-5">
+                <div class="d-flex align-items-center">
+                    <span>+48</span>
+                    <div class="me-2"></div>
+                    <input id="phone" type="tel" class="form-control" name="phone" value="@Model.Customer?.phone" placeholder="+48 000-000-000"  />
+                    <span id="phoneError" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-2"></div>
+        <div class="col-md-3">
+            <input  type="hidden" name="customerId" value="@Model.Customer?.Id"/>
+            <input class="btn btn-success" id="submitButton" type="submit" value="Do kasy" disabled />
+        </div>
+    </form>
+</div>
+
+
+<script src="https://unpkg.com/imask"></script>
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('emailError');
+        const checkoutFormInputs = document.querySelectorAll('#checkoutForm input');
+        const checkoutSubmitButton = document.querySelector('#submitButton');
+        
+        const phoneInput = document.getElementById('phone');
+        const postcodeInput = document.getElementById('postcode');
+
+        // Функции для отображения ошибок
+        function showError(input, message) {
+            const errorSpan = input.nextElementSibling;
+            input.classList.add('is-invalid');
+            if (errorSpan) {
+                errorSpan.textContent = message;
+            }
+        }
+
+        function clearError(input) {
+            const errorSpan = input.nextElementSibling;
+            input.classList.remove('is-invalid');
+            if (errorSpan) {
+                errorSpan.textContent = '';
+            }
+        }
+
+        // Функция для валидации email
+        function validateEmail(email) {
+            const emailPattern = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+            return emailPattern.test(email);
+        }
+
+        // Функция для проверки обязательных полей
+        function validateRequiredFields() {
+            let isValid = true;
+            const requiredFields = ['name', 'surname', 'city', 'street', 'numberHouse'];
+
+            requiredFields.forEach(fieldId => {
+                const input = document.getElementById(fieldId);
+                if (input.value.trim() === '') {
+                    showError(input, 'pole jest obowiązkowe');
+                    isValid = false;
+                } else {
+                    clearError(input);
+                }
+            });
+
+            return isValid;
+        }
+
+        // Функция для проверки длины введенных данных в поле с маской
+        function validateMaskLength(input, requiredLength, message) {
+            if (input.value.length < requiredLength) {  
+                showError(input, message);
+                return false;
+            } else {
+                clearError(input);
+                return true;
+            }
+        }
+
+        // Восстановление состояния формы из localStorage
+        if (localStorage.getItem('emailValid') === 'true') {
+            emailInput.classList.remove('is-invalid');
+            emailError.textContent = '';
+            checkoutFormInputs.forEach(input => {
+                input.disabled = false;
+            });
+            checkoutSubmitButton.disabled = false;
+        } else {
+            emailInput.classList.add('is-invalid');
+            checkoutFormInputs.forEach(input => {
+                input.disabled = true;
+            });
+            checkoutSubmitButton.disabled = true;
+        }
+
+        // Отключаем отправку формы, если email некорректный или другие поля не заполнены
+        document.getElementById('checkoutForm').addEventListener('submit', function (event) {
+            let isValid = validateEmail(emailInput.value) && 
+                          validateRequiredFields() && 
+                          validateMaskLength(phoneInput, 15, '') &&
+                          validateMaskLength(postcodeInput, 6, '');
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+
+       
+        new IMask(phoneInput, {
+            mask: '+{48} 000-000-000'  
+        });
+
+        
+        new IMask(postcodeInput, {
+            mask: '00-000'  
+        });
+    });
+
+</script>
