@@ -53,6 +53,8 @@ namespace Shop.Models
         //[Required(ErrorMessage = "Adres e-mail jest wymagany")]
         public string email { get; set; }
 
+        public string? NIP { get; set; }
+
        public virtual Order Order { get; set; }
     }
 }

@@ -35,7 +35,7 @@
             <div class="container-fluid p-0">
             <div class="d-flex justify-content-between w-100">
                 <div class="p-0">
-                    <a class="nav-link" href="#">  <img src="\img\logomak_logo (2) (1).png" style="height:50px;" /> </a>
+                        <a class="nav-link" href="/Home/Index/">  <img src="\img\logomak_logo (2) (1).png" style="height:50px;" /> </a>
                 </div>
                 
 
@@ -85,11 +85,18 @@
                         </ul>
                        
                     </div>
-
-                    <div class="ms-auto">
+                    <form asp-controller="Home" asp-action="Search" method="post">
+                    <div class="ms-auto d-flex align-content-end">
+                        
                         <input type="search" class="form-control form-control-dark text-bg-dark" name="query" placeholder="Szukaj po nazwie..." aria-label="Search">
+                        <button type="submit" class="btn btn-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                            </svg>
+                            </button>
+                       
                     </div>
-
+                    </form>
                 </div>
             </div>
        

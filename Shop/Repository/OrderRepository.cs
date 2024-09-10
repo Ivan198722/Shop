@@ -32,7 +32,7 @@ namespace Shop.Repository
         }
 
         public async Task<Customer> AddCustomer(string email, string name, string surname, string city, string postcode,
-             string street, string numberHouse, string numberFlat, string phone)
+             string street, string numberHouse, string numberFlat, string phone, string NIP)
         {
 
             var customer = new Customer
@@ -45,7 +45,8 @@ namespace Shop.Repository
                 street = street,
                 NumberHouse = numberHouse,
                 NumberFlat = numberFlat,
-                phone = phone
+                phone = phone,
+                NIP=NIP
             };
 
            await _dbContext.Customers.AddAsync(customer);
@@ -56,7 +57,7 @@ namespace Shop.Repository
 
       
         public async Task<int> UpdateCustomer(Customer customer, string email, string name, string surname, string city, string postcode,
-         string street, string numberHouse, string numberFlat, string phone)
+         string street, string numberHouse, string numberFlat, string phone,string NIP)
         {
             if (customer == null) return -1;  
 
@@ -108,7 +109,11 @@ namespace Shop.Repository
                 customer.phone = phone;
                 isModified = true;
             }
-
+            if (customer.NIP != NIP)
+            {
+                customer.NIP = NIP;
+                isModified = true;
+            }
             if (isModified)
             {
                 await _dbContext.SaveChangesAsync();
@@ -119,7 +124,7 @@ namespace Shop.Repository
         }
 
         public async Task<int> CheckCustomer(int customerId, string email, string name, string surname, string city, string postcode,
-            string street, string numberHouse, string numberFlat, string phone)
+            string street, string numberHouse, string numberFlat, string phone, string NIP)
         {
             var customer = await _dbContext.Customers
                 .Where(c => c.Id == customerId)
@@ -127,13 +132,13 @@ namespace Shop.Repository
 
             if (customer != null)
             {
-               return await UpdateCustomer(customer, email, name, surname, city, postcode, street, numberHouse, numberFlat, phone);
+               return await UpdateCustomer(customer, email, name, surname, city, postcode, street, numberHouse, numberFlat, phone, NIP);
 
                
             }
             else
             {
-                var addCustomer =  await  AddCustomer(email, name, surname, city, postcode, street, numberHouse, numberFlat, phone);
+                var addCustomer =  await  AddCustomer(email, name, surname, city, postcode, street, numberHouse, numberFlat, phone, NIP);
 
              return addCustomer.Id;
                 
@@ -148,7 +153,8 @@ namespace Shop.Repository
             {
                 CustomerId = customerId,
                 OrderTime = DateTime.Now,
-                PaymentStatus=false
+                PaymentStatus=false,
+                CompletionStatus=false,
             });
 
             await _dbContext.AddAsync(order);
@@ -169,12 +175,12 @@ namespace Shop.Repository
         
         
         public async Task CompleteOrder(int customerId, string email, string name, string surname, string city, string postcode,
-    string street, string numberHouse, string numberFlat, string phone)
+    string street, string numberHouse, string numberFlat, string phone, string NIP)
        
         {
             try
             {
-                var idCustomer = await CheckCustomer(customerId, email, name, surname, city, postcode, street, numberHouse, numberFlat, phone);
+                var idCustomer = await CheckCustomer(customerId, email, name, surname, city, postcode, street, numberHouse, numberFlat, phone, NIP);
 
                 var order = await CreateOrder(idCustomer);
 

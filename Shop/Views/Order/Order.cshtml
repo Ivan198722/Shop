@@ -41,7 +41,15 @@
     <div >
         <span>@Model.OrderCustomer.phone </span>
         </div>
-   
+
+    @if (Model.OrderCustomer.NIP != null)
+    {
+    <div class="mt-1"></div>
+    <div>
+        <span>NIP: @Model.OrderCustomer.NIP</span>
+    </div>
+    }
+    else{}
 </div>
 
 <div class="mt-5 col-lg-6">
@@ -49,7 +57,7 @@
     {
          <form asp-controller="Products" asp-action="ProductDescription" method="post">
             <input type="hidden" name="productId" value="@el.product.Id" />
-            <input type="hidden" name="categoryId" value="@el.product.categoryId" />
+  
 
             <button type="submit" style="border: none; background: none; padding: 0; width: 100%; text-align: left;">
         <div class="alert alert-warning mt-3 d-flex justify-content-md-start">
@@ -105,6 +113,7 @@
         <input type="hidden" name="numberHouse" value="@Model.OrderCustomer.NumberHouse" />
         <input type="hidden" name="numberFlat" value="@Model.OrderCustomer.NumberFlat" />
         <input type="hidden" name="phone" value="@Model.OrderCustomer.phone" />
+        <input type="hidden" name="NIP" value="@Model.OrderCustomer.NIP" />
 
         <div class="form-group">
             <label for="cardNumber">Numer karty</label>
@@ -121,9 +130,10 @@
             <input type="text" class="form-control" id="cardHolder" placeholder="Imię Nazwiśko">
             <span id="nameError" class="text-danger"></span>
         </div>
-        <div class="form-group">
+        <div class="">
             <label for="cvv">CVV</label>
-            <input type="password" class="form-control" id="cvv" placeholder="CVV" maxlength="3">
+            <input type="password" name="cvv-fake" style="display:none;">
+            <input type="password" class="form-control" id="cvv" placeholder="CVV" maxlength="3" autocomplete="off" inputmode="numeric">
             <span id="cvvError" class="text-danger"></span>
         </div>
         <button type="submit" class="btn btn-primary mt-3">Do zapłaty</button>
@@ -207,4 +217,26 @@
     new IMask(cartExpiry, {
         mask: '00/00'  
     });
-        </script>
+
+
+    // document.querySelectorAll('.form-control').addEventListener('click', function () {
+    //         this.removeAttribute('disabled');
+    //         this.focus();
+    //     });
+    // document.querySelectorAll('.form-control').forEach(function (element) {
+    //     element.addEventListener('focus', function () {
+    //         if (this.disabled) {
+    //             this.disabled = false;
+    //             this.focus();
+    //         }
+    //     });
+
+    //     element.addEventListener('input', function () {
+    //         if (this.type === 'password' || this.disabled) {
+    //             this.type = 'text';  // Меняем тип на текст, если это поле было паролем
+    //             this.disabled = false;  // Активируем поле
+    //         }
+    //     });
+    // });
+
+</script>

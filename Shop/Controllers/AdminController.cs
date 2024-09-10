@@ -7,13 +7,13 @@ using Shop.ViewModels;
 
 namespace Shop.Controllers
 {
-    public class AdminController : BaseController
+    public class AdminController : BaseAdminController
     {
         private readonly IAdminAllProducts _adminAllProducts;
 
         
 
-        public AdminController( IAdminAllProducts adminRepository, IAllShopCart allShopCart):base(adminRepository, allShopCart)
+        public AdminController( IAdminAllProducts adminRepository, IAllSale allSale):base(adminRepository, allSale)
         {
             _adminAllProducts = adminRepository;
         }
@@ -73,6 +73,7 @@ namespace Shop.Controllers
             }
         }
 
+
         public async Task<IActionResult> Search(int categoryId, string query)
         {
             if (!string.IsNullOrEmpty(query))
@@ -83,7 +84,7 @@ namespace Shop.Controllers
             {
                 return RedirectToAction("ProductList", new { categoryId = categoryId });
             }
-           
+
         }
 
         public async Task<ActionResult> CategorySet()
@@ -133,9 +134,9 @@ namespace Shop.Controllers
             return RedirectToAction("CategorySet");
         }
 
-        public async Task<ActionResult> EditProduct(int productId, int categoryId)
+        public async Task<ActionResult> EditProduct(int productId)
         {
-           var product= await _adminAllProducts.EditProduct(productId, categoryId);
+           var product= await _adminAllProducts.EditProduct(productId);
 
             var viewModel = new AdminViewModel
             {

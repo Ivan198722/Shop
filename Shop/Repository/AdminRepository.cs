@@ -194,21 +194,23 @@ namespace Shop.Repository
         {
             if (string.IsNullOrWhiteSpace(query))
             {
-               
+
                 return await GetProductOfCategoryAsyncSortPrice(categoryId);
             }
 
-          
+
             return await _context.Categories
-                .Where (c=>c.Id==categoryId)
+                .Where(c => c.Id == categoryId)
                 .Select(c => new ProductInfo
                 {
-                    Category= c, 
-                    
-                    products = c.products.Where(p=>p.name.StartsWith(query)).ToList()
+                    Category = c,
+
+                    products = c.products.Where(p => p.name.StartsWith(query, StringComparison.OrdinalIgnoreCase)).ToList()
                 })
                 .ToListAsync();
         }
+
+
 
         public async Task AddProperty(int categoryId, string propertyName)
         {
@@ -318,7 +320,7 @@ namespace Shop.Repository
             }
         }
          
-        public async Task<IEnumerable<ProductInfo>> EditProduct(int productId, int categoryId)
+        public async Task<IEnumerable<ProductInfo>> EditProduct(int productId)
         {
             var images = await GetProductImages(productId);
             var properties = await GetProductProperties(productId);

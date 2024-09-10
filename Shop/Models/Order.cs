@@ -20,7 +20,10 @@ namespace Shop.Models
 
         public bool PaymentStatus { get; set; }
 
-     
+        public bool CompletionStatus { get; set; }
+
+
+
         public virtual FinishedOrder FinishedOrder { get; set; }
 
     }

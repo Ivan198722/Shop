@@ -1,0 +1,142 @@
+﻿@{
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+
+
+<style>
+    .order p {
+        margin: 0;
+        background-color: antiquewhite
+    }
+
+    ;
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 3;
+        text-align: left;
+        background-color: white;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .frame {
+        border: 1px solid black
+    }
+
+    #productName:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+</style>
+<div class="row justify-content-start m-2 mt-5 mb-2">
+
+    @foreach (var order in Model.OrderInfo)
+    {
+        
+        <div class="frame d-flex align-items-center mt-1">
+            <div class="order">
+                <p> @order.Customer.name</p>
+                <p> @order.Customer.surname</p>
+                <p> @order.Customer.city @order.Customer.postcode</p>
+                <p>
+                    <span>@order.Customer.street </span>  <span>@order.Customer.NumberHouse</span>
+                    @if (order.Customer.NumberFlat != null)
+                    {
+                        <span>/@order.Customer.NumberFlat</span>
+                    }
+                    else
+                    {}
+                    </p>
+                <p> @order.Customer.phone</p>
+                <p> @order.Customer.email</p>
+                <p> @order.Customer.NIP</p>
+            </div>
+
+            <div class="table-container m-lg-2">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Nazwa</th>
+                            <th>Ilość</th>
+                            <th>Cena</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detail in order.Details)
+                        {
+
+                            <tr>
+                                <td>@detail.Product.Id</td>
+                                <td><a id="productName" data-product-id="@detail.Product.Id">@detail.Product.name</a></td>
+                                <td>@detail.Product.quantity</td> 
+                                <td>@detail.Product.price</td> 
+                            </tr>
+
+                           
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <form asp-controller="Admin" asp-action="FinishOrder" method="post">
+                    <input type="hidden" name="orderId" value="@order.Order.Id" />
+                    <button type="submit" class="btn btn-primary">Przygotowane</button>
+                </form>
+                <div class="mt-2"></div>
+                <form asp-controller="Sale" asp-action="GeneratePDF" method="post">
+                    @* Скрытые поля для передачи данных о конкретной итерации *@
+                    <input type="hidden" name="name" value="@order.Customer.name" />
+                    <input type="hidden" name="surname" value="@order.Customer.surname" />
+                    <input type="hidden" name="city" value="@order.Customer.city" />
+                    <input type="hidden" name="postcode" value="@order.Customer.postcode" />
+                    <input type="hidden" name="street" value="@order.Customer.street" />
+                    <input type="hidden" name="numberHouse" value="@order.Customer.NumberHouse" />
+                    <input type="hidden" name="numberFlat" value="@order.Customer.NumberFlat" />
+                    <input type="hidden" name="phone" value="@order.Customer.phone" />
+                    <input type="hidden" name="email" value="@order.Customer.email" />
+                    <input type="hidden" name="NIP" value="@order.Customer.NIP" />
+
+                    @foreach (var detail in order.Details)
+                    {
+                        
+                        <input type="hidden" name="detailName[]" value="@detail.Product.name" />
+                        <input type="hidden" name="detailQuantity[]" value="@detail.quantity" />
+                        <input type="hidden" name="detailPrice[]" value="@detail.price" />
+                    }
+
+                    <button type="submit" class="btn btn-primary">Faktura PDF</button>
+                </form>
+
+               
+            </div>
+        </div>
+
+       
+
+
+    }
+
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('#productName').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const productId = this.getAttribute('data-product-id');
+               
+
+                window.open(`/Admin/EditProduct?productId=${productId}`, '_blank');
+
+               
+            });
+        });
+    });
+</script>

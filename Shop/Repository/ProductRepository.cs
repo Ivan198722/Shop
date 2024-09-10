@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Shop.Interfaces;
 using Shop.Models;
+using SkiaSharp;
 using System.Security.Cryptography.X509Certificates;
 using static NuGet.Client.ManagedCodeConventions;
 
@@ -265,6 +266,21 @@ namespace Shop.Repository
 
             return  filtrPropucts;
            
+        }
+
+        public async Task<IEnumerable<ProductDetails>> Search(string query)
+        {
+            var allProduct = await GetProductDetailsAsync();
+
+            if (string.IsNullOrWhiteSpace(query))
+            {
+
+                return allProduct;
+            }
+
+
+            return allProduct.Where(p=>p.Product.name.StartsWith(query, StringComparison.OrdinalIgnoreCase));
+
         }
 
     }

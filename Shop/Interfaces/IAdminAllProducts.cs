@@ -20,6 +20,7 @@ namespace Shop.Interfaces
         Task<IEnumerable<ProductInfo>> FiterProductsAsync(int categoryId, string[]? manufacturer, decimal? priceFrom, decimal? priceTo, DateTime? fromDate, DateTime? toDate);
 
         Task<IEnumerable<ProductInfo>> Search(int categoryId, string query);
+        
 
         Task AddProperty(int categoryId, string propertyName);
 
@@ -31,7 +32,7 @@ namespace Shop.Interfaces
 
         Task EditCategory(int categoryId, string newCategoryName);
 
-        Task<IEnumerable<ProductInfo>> EditProduct(int productId, int categoryId);
+        Task<IEnumerable<ProductInfo>> EditProduct(int productId);
 
         Task AddPhoto(int Id, Stream imageStream, string fileExtension);
 

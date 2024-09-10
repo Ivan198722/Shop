@@ -424,25 +424,14 @@
        <script>
 
     function showAddForm(propertyName) {
-        // Показать форму addPropertyProductForm для соответствующего свойства
+       
         var addForm = document.getElementById('addPropertyProductForm_' + propertyName);
         if (addForm) {
             addForm.style.display = 'flex';
         }
     }
 
-    // function updateHiddenInput(propertyName) {
-    //     // Находим текстовый инпут и скрытый инпут по уникальному ID
-    //     let textInput = document.getElementById('propertyParameters_' + propertyName);
-    //     let hiddenInput = document.getElementById('hiddenPropertyParameters_' + propertyName);
-
-    //     let textInput1 = document.getElementById('addPropertyParameters_' + propertyName);
-    //     let hiddenInput1 = document.getElementById('hiddenAddPropertyParameters_' + propertyName);
-
-    //     // Копируем значение из текстового инпута в скрытый инпут
-    //     hiddenInput.value = textInput.value;
-    //     hiddenInput1.value = textInput1.value;
-    // }
+   
 
     CKEDITOR.replace('editShortDescriptionField');
 

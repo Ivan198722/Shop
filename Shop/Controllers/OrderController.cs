@@ -53,7 +53,7 @@ namespace Shop.Controllers
         }
 
         public async Task<IActionResult> Order(int customerId, string email, string name, string surname, string city, string postcode,
-             string street, string numberHouse, string numberFlat, string phone)
+             string street, string numberHouse, string numberFlat, string phone, string NIP)
         {
             var customer = new Customer
             {
@@ -66,7 +66,8 @@ namespace Shop.Controllers
                 street = street,
                 NumberHouse = numberHouse,
                 NumberFlat = numberFlat,
-                phone = phone
+                phone = phone,
+                NIP = NIP
             };
 
             var items = await _allShopCart.GetShopCartItemsAsync();
@@ -86,9 +87,9 @@ namespace Shop.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CompleteOrder(int customerId, string email, string name, string surname, string city, string postcode,
-            string street, string numberHouse, string numberFlat, string phone)
+            string street, string numberHouse, string numberFlat, string phone, string NIP)
         {
-            await _allOrders.CompleteOrder(customerId, email, name, surname, city, postcode, street, numberHouse, numberFlat, phone);
+            await _allOrders.CompleteOrder(customerId, email, name, surname, city, postcode, street, numberHouse, numberFlat, phone, NIP);
 
             if(_allOrders.HasInsufficientItems)
             {

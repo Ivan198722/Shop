@@ -21,6 +21,7 @@ builder.Services.AddTransient<IAdminAllProducts, AdminRepository>();
 builder.Services.AddTransient<IAllProducts, ProductRepository>();
 builder.Services.AddTransient<IAllShopCart, ShopCartRepository>();
 builder.Services.AddTransient<IAllOrders, OrderRepository>();
+builder.Services.AddTransient<IAllSale, SaleRepository>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ShopCart>(s => ShopCartRepository.GetCart(s));
@@ -63,7 +64,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}");
+    pattern: "{controller=Admin}/{action=Index}");
 
 app.MapControllerRoute(
     name: "admin",

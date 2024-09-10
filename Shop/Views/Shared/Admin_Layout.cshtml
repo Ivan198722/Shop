@@ -20,7 +20,7 @@
 </head>
 <body>
     <header class="navbar sticky-top bg-light flex-md-nowrap p-0 shadow" data-bs-theme="light">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#"><img src="\img\logomak_logo (2) (1).png" /></a>
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="/Admin/Index/"><img src="\img\logomak_logo (2) (1).png" /></a>
 
        
 
@@ -33,9 +33,10 @@
             <div class="sidebar col-lg-2 overflow-y-auto">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#">
-                           
-                            Dashboard
+                        <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/Sale/Index/">
+
+                            Aktywne zamówienia
+                            <span class="badge bg-primary rounded-pill">@ViewBag.CountActiveOrders</span>
                         </a>
                     </li>
                     <li class="nav-item">

@@ -17,14 +17,24 @@ namespace Shop.Controllers
             _AllProducts = allProducts;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string query)
         {
             var faivoriteProduct = await _AllProducts.GetProductDetailsAsync();
+            if(query != null)
+            {
+                faivoriteProduct = await _AllProducts.Search(query);
+            }
 
             var viewModel = new HomeViewModel
             { Products = faivoriteProduct };
 
             return View(viewModel);
         }
+
+        public async Task<IActionResult> Search(string query)
+        {
+            return RedirectToAction("Index", new { query });
+        }
+        
     }
 }

@@ -30,6 +30,8 @@ namespace Shop
 
         public DbSet<Order> Orders { get; set; }
 
+        public DbSet<Company> Company { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

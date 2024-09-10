@@ -74,14 +74,16 @@ namespace Shop.Controllers
           
         }
 
-        public async Task<IActionResult> ProductDescription(int productId, int categoryId)
+        public async Task<IActionResult> ProductDescription(int productId)
         {
-            var product = await _adminAllProducts.EditProduct(productId, categoryId);
+            var product = await _adminAllProducts.EditProduct(productId);
 
             var viewModel = new ProductsViewModel {ProductInfos=product};
 
             return View(viewModel);
 
         }
+
+
     }
 }
