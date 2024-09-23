@@ -10,18 +10,25 @@ namespace Shop.Controllers
     public class AdminController : BaseAdminController
     {
         private readonly IAdminAllProducts _adminAllProducts;
+        private readonly IAllSale _allSale;
 
         
 
         public AdminController( IAdminAllProducts adminRepository, IAllSale allSale):base(adminRepository, allSale)
         {
             _adminAllProducts = adminRepository;
+            _allSale = allSale;
         }
 
-        public ActionResult Index()
+        public async Task<IActionResult> Index(string sort)
         {
-            
-            return View();
+            var orderDetail = await _allSale.GetProductsSold(sort);
+
+            var viewModel = new SaleViewModel
+            {
+                OrderDetail = orderDetail
+            };
+            return View(viewModel);
         }
 
       

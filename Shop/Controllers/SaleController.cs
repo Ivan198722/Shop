@@ -5,6 +5,7 @@ using Shop.Interfaces;
 using Shop.ViewModels;
 using System.util;
 using Microsoft.AspNetCore.Hosting;
+using Shop.Models;
 
 namespace Shop.Controllers
 {
@@ -32,7 +33,7 @@ namespace Shop.Controllers
 
         public async Task<ActionResult> GeneratePDF(string name, string surname, string city, string postcode,
             string street, string numberHouse, string numberFlat, string phone,
-           string email, string NIP, string[] detailName, string[] detailQuantity, string[] detailPrice)
+           string email, string NIP, string[] detailName, string[] detailQuantity, string[] detailPrice, int orderId)
         {
             MemoryStream ms = new MemoryStream();
             Document document = new Document();
@@ -60,7 +61,7 @@ namespace Shop.Controllers
 
            
             string currentDate = DateTime.Now.ToString("dd/MM/yyyy");
-            PdfPCell dateCell = new PdfPCell(new Phrase(currentDate, fontBold));
+            PdfPCell dateCell = new PdfPCell(new Phrase($"Faktura nr:{orderId}/{currentDate}", fontBold));
             dateCell.Border = PdfPCell.NO_BORDER;  
             dateCell.HorizontalAlignment = PdfPCell.ALIGN_RIGHT;
              table.AddCell(dateCell);
@@ -185,6 +186,14 @@ namespace Shop.Controllers
 
             // Возвращаем PDF в виде массива байтов
             return File(ms.ToArray(), "application/pdf", $"{name} {surname}.pdf");
+        }
+
+
+        public async Task<IActionResult> FinishOrder(int orderId)
+        {
+          await  _allSale.FinishOrder(orderId);
+
+            return RedirectToAction("Index");
         }
 
     }

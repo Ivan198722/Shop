@@ -3,3 +3,114 @@
 }
 
        
+@{
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+
+
+<style>
+    .order p {
+        margin: 0;
+        background-color: aliceblue;
+        width: 100%;
+    }
+
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 3;
+        text-align: left;
+        background-color: white;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .frame {
+        border: 1px solid black
+    }
+
+    #productName:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+</style>
+<div class="d-flex justify-content-between col-lg-4 m-4">
+    <div class="dropdown">
+        <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Sortuj wg ilości
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="?sort=quantityUp">Najwięcej</a></li>
+            <li><a class="dropdown-item" href="?sort=quantityDown">Najmniej</a></li>
+            
+        </ul>
+    </div>
+
+    <div class="dropdown">
+        <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Sortuj wg ceny
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="?sort=priceUp">Zysk max</a></li>
+            <li><a class="dropdown-item" href="?sort=priceDown">Zysk min</a></li>
+           
+        </ul>
+    </div>
+</div>
+
+
+<div class="row justify-content-start m-2 mt-2 mb-2 col-lg-10">
+
+            <div class="table-container m-lg-2">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nazwa</th>
+                            <th>Ilość</th>
+                            <th>Cena</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detail in Model.OrderDetail)
+                        {
+
+                            <tr>
+                                <td>@detail.productID</td>
+                                <td><a id="productName" data-product-id="@detail.Product.Id">@detail.Product.name</a></td>
+                                <td>@detail.quantity</td>
+                                <td>@detail.price</td>
+                            </tr>
+
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+    
+
+</div>
+<script>
+   
+
+        document.querySelectorAll('#productName').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const productId = this.getAttribute('data-product-id');
+
+
+                window.open(`/Admin/EditProduct?productId=${productId}`, '_blank');
+
+
+            });
+        });
+
+    
+</script>

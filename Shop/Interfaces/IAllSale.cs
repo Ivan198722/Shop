@@ -9,5 +9,9 @@ namespace Shop.Interfaces
         Task<IEnumerable<OrderInfo>> GetActiveOrders();
 
         Task<Company> GetDataCompany();
+
+        Task FinishOrder(int orderId);
+
+        Task<IEnumerable<PrintOrderDetail>> GetProductsSold(string sort);
     }
 }

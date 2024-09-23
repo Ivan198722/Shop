@@ -143,7 +143,7 @@
                     }
 
                 </div>
-                <button type="submit" class="btn btn-primary" style="display:none;">Filtr</button>
+                <button type="submit" class="btn btn-primary" style="display: none;">Filtr</button>
 
             </form>
             
@@ -214,61 +214,110 @@
 
  
  <script>
-
-
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener('DOMContentLoaded', function () {
+        // 1. Устанавливаем значения для полей ввода цены из URL
         const urlParams = new URLSearchParams(window.location.search);
 
         const priceFrom = urlParams.get('priceFrom');
+        const priceTo = urlParams.get('priceTo');
+
         if (priceFrom !== null) {
             document.getElementById('price-from').value = priceFrom;
         }
 
-        const priceTo = urlParams.get('priceTo');
         if (priceTo !== null) {
             document.getElementById('price-to').value = priceTo;
         }
 
-        
-    });
+        // 2. Обработка отправки формы при изменении чекбоксов
+        const form = document.querySelector('#filter-form'); // Используем id формы для точного селектора
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.querySelector('form');
+        if (form) {
+            const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+            const priceInputs = form.querySelectorAll('input[type="number"]');
 
-        const submitForm = () => {
-            form.submit();
-        };
+            // Функция для отправки формы
+            const submitForm = () => form.submit();
 
-        const checkboxes = form.querySelectorAll('input[type="checkbox"]');
-      
+            // Привязываем событие изменения к каждому чекбоксу
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', submitForm);
+            });
 
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', submitForm);
-        });
+            // Привязываем событие изменения к полям цены
+            priceInputs.forEach(input => {
+                input.addEventListener('change', submitForm);
+            });
+        }
 
-    });
+        // 3. Сохранение и восстановление позиции прокрутки
+        const saveScrollPosition = () => localStorage.setItem('scrollPosition', window.scrollY);
 
+        // Привязываем сохранение позиции прокрутки к событию отправки формы
+        form.addEventListener('submit', saveScrollPosition);
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const forms = document.querySelectorAll('form');
-
-        // Функция для сохранения позиции прокрутки
-        const saveScrollPosition = () => {
-            localStorage.setItem('scrollPosition', window.scrollY);
-        };
-
-        // При каждом отправлении формы, сохраняем позицию прокрутки
-        forms.forEach(form => {
-            form.addEventListener('submit', saveScrollPosition);
-        });
-
-        // Восстановление позиции прокрутки после перезагрузки страницы
+        // Восстанавливаем позицию прокрутки после перезагрузки страницы
         const scrollPosition = localStorage.getItem('scrollPosition');
         if (scrollPosition) {
             window.scrollTo(0, parseInt(scrollPosition, 10));
-            // Удаляем сохраненную позицию из localStorage
-            localStorage.removeItem('scrollPosition');
+            localStorage.removeItem('scrollPosition'); // Удаляем сохранённую позицию
         }
     });
 
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     const urlParams = new URLSearchParams(window.location.search);
+
+    //     const priceFrom = urlParams.get('priceFrom');
+    //     if (priceFrom !== null) {
+    //         document.getElementById('price-from').value = priceFrom;
+    //     }
+
+    //     const priceTo = urlParams.get('priceTo');
+    //     if (priceTo !== null) {
+    //         document.getElementById('price-to').value = priceTo;
+    //     }
+
+        
+    // });
+
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const form = document.querySelector('form');
+
+    //     const submitForm = () => {
+    //         form.submit();
+    //     };
+
+    //     const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+      
+
+    //     checkboxes.forEach(checkbox => {
+    //         checkbox.addEventListener('change', submitForm);
+    //     });
+
+    // });
+
+
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const forms = document.querySelectorAll('form');
+
+    //     // Функция для сохранения позиции прокрутки
+    //     const saveScrollPosition = () => {
+    //         localStorage.setItem('scrollPosition', window.scrollY);
+    //     };
+
+    //     // При каждом отправлении формы, сохраняем позицию прокрутки
+    //     forms.forEach(form => {
+    //         form.addEventListener('submit', saveScrollPosition);
+    //     });
+
+    //     // Восстановление позиции прокрутки после перезагрузки страницы
+    //     const scrollPosition = localStorage.getItem('scrollPosition');
+    //     if (scrollPosition) {
+    //         window.scrollTo(0, parseInt(scrollPosition, 10));
+    //         // Удаляем сохраненную позицию из localStorage
+    //         localStorage.removeItem('scrollPosition');
+    //     }
+    // });
+
+    // document.querySelector('#filter-form').submit();
 </script>

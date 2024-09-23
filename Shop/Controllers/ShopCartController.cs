@@ -36,39 +36,7 @@ namespace Shop.Controllers
             return View(modelView);
         }
 
-        //public async Task<IActionResult> addToCart(int productId, string returnUrl, int page, int categoryId)
-        //{
-        //    var products = await _allShopCart.AllProducts();
-        //    var product = products.FirstOrDefault(p=>p.Id == productId);
-
-
-        //    if (product != null)
-        //    {
-
-        //        var existingProductItems = await _allShopCart.GetShopCartItemsAsync();
-        //        var existingProductItem = existingProductItems.FirstOrDefault(p=>p.product.Id==productId);
-
-
-        //        if (existingProductItem != null)
-        //        {
-        //             await UpdateCartItem(productId, "increment");
-        //        }
-        //        else
-        //        {
-
-        //            _allShopCart.AddToCart(product);
-
-
-        //        }
-        //    }
-        //    if(page==0||categoryId==0)
-        //    {
-        //        return Redirect($"{returnUrl}?productId={productId}"); }
-        //    else {return Redirect($"{returnUrl}?categoryId={categoryId}&&page={page}"); }
-
-        //}
-
-
+       
         [HttpPost]
         public async Task<IActionResult> addToCart(int productId, string returnUrl, int page, int categoryId)
         {

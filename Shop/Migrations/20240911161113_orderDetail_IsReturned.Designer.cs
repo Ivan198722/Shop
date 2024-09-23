@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop;
 
@@ -11,9 +12,11 @@ using Shop;
 namespace Shop.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240911161113_orderDetail_IsReturned")]
+    partial class orderDetail_IsReturned
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -226,7 +229,13 @@ namespace Shop.Migrations
                     b.Property<int>("orderId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("productID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

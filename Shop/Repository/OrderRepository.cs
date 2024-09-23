@@ -194,18 +194,22 @@ namespace Shop.Repository
                     if (quantityAvailable >= item.quantity)
                     {
                         hasInsufficientItems = false;
-                        
-                        var orderDetail = new OrderDetail()
-                        {
-                            orderId = order.Id,
-                            productID = item.product.Id,
-                             quantity = item.quantity,
-                            price = item.price
-                        };
 
-                        _dbContext.OrderDetails.Add(orderDetail);
-                       
+                      
+                            for(int i = 0;i< item.quantity;i++)
+                            {
+                              var  orderDetail = new OrderDetail()
+                                {
+                                    orderId = order.Id,
+                                    productID = item.product.Id,
+                                    //quantity = 1,
+                                    //price = item.product.price,
+                                    IsReturned = false
+                                }; 
+                            
+                            _dbContext.OrderDetails.Add(orderDetail);
 
+                            }
                         
                         var productToUpdate = await _dbContext.Products.FindAsync(item.product.Id);
                         productToUpdate.quantity -= item.quantity;

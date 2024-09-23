@@ -9,8 +9,10 @@
         border:none;
         background-color:transparent;
         font-style: italic;
+        padding: 5px;
     }
     
+  
     h4{
         font-weight:bold;
     }
@@ -138,23 +140,49 @@
 
             </div>
         </div>
-  <div class="mt-2"></div>
+        <div class="mt-2"></div>
 
-    <div class="d-flex justify-content-center">
-        <div class="col-lg-4 ">
+        <div class="d-flex justify-content-center">
+            <div class="col-lg-4 ">
             <table>
                 <tbody>
-                    @foreach (var property in wholeProduct.productProperties)
-                    {
-                        <tr>
-                            <td>
-                                @property.propertyName
-                            </td>
-                            <td>
-                                @property.propertyParameters
-                            </td>
-                        </tr>
-                    }
+                  
+                        @{
+                            string currentPropertyName = null;
+                            List<string> parametersList = new List<string>();
+
+                            foreach (var property in wholeProduct.productProperties)
+                            {
+                                // Проверка на изменение имени свойства
+                                if (currentPropertyName == null || currentPropertyName != property.propertyName)
+                                {
+                                    // Если имя свойства изменилось, выводим предыдущую строку с параметрами (если они есть)
+                                    if (currentPropertyName != null)
+                                    {
+                                        <tr>
+                                            <td>@currentPropertyName</td>
+                                            <td>@string.Join("; ", parametersList)</td>
+                                        </tr>
+                                    }
+
+                                    // Обновляем текущее имя свойства и очищаем список параметров
+                                    currentPropertyName = property.propertyName;
+                                    parametersList.Clear();
+                                }
+
+                                // Добавляем параметр в список
+                                parametersList.Add(property.propertyParameters);
+                            }
+
+                            // Выводим последнюю строку после завершения цикла
+                            if (currentPropertyName != null)
+                            {
+                                <tr>
+                                    <td>@currentPropertyName</td>
+                                    <td>@string.Join("; ", parametersList)</td>
+                                </tr>
+                            }
+                        }
                 </tbody>
             </table>
 
