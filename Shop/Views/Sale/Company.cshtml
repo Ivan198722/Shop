@@ -1,0 +1,62 @@
+﻿@{
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+
+<style>
+    input{
+        border:none;
+        background-color:transparent;
+    }
+</style>
+
+ <form asp-controller="Sale" asp-action="EditCompany" method="post">
+<div class="row col-md-6 m-3">
+    <h3>Moja firma</h3>
+
+    <div class="d-flex align-items-center">
+
+        <span>Nazwa: <input type="text" name="name" value="@Model.Company.name" /></span>
+
+    </div>
+    <div class="mt-1"></div>
+
+    <div class=" d-flex align-items-center">
+
+        <span>Ulica: <input type="text" name="street" value="@Model.Company.street" /></span>
+
+        <span>Numer: <input type="text" name="number" value="@Model.Company.number" /></span>
+
+    </div>
+
+    <div class="mt-1"></div>
+    <div class=" d-flex align-items-center">
+        <span>Miasto: <input type="text" name="city" value="@Model.Company.city" /></span>
+        <span>Kod pocztowy: <input type="text" name="postcode" value="@Model.Company.postcode" /></span>
+
+    </div>
+
+
+    <div class="mt-1"></div>
+    <div>
+        <span>Tel <input type="text" name="phoneNumber" value="@Model.Company.phoneNumber" /></span>
+
+    </div>
+
+        <div class="mt-1"></div>
+        <div>
+            <span>Email <input type="text" name="email" value="@Model.Company.email" /></span>
+
+        </div>
+  
+        <div class="mt-1"></div>
+        <div>
+        <span>NIP: <input type="text" name="NIP" value="@Model.Company.NIP" /> </span>
+
+        <button type="submit" id="saveButton" class="button-edit btn btn-info square-button" style=" border: none; ">
+            <span>Zapisz</span>
+        </button>
+        </div>
+        <div class="mt-2"></div>
+    
+</div>
+</form>

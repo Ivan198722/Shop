@@ -11,5 +11,7 @@ namespace Shop.ViewModels
         public IEnumerable<PrintCustomer> Customers { get; set; }
 
         public IEnumerable<OrderInfo> CustomerOrder { get; set; }
+
+        public Company Company { get; set; }
     }
 }

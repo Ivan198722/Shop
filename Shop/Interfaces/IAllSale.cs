@@ -10,6 +10,9 @@ namespace Shop.Interfaces
 
         Task<Company> GetDataCompany();
 
+        Task EditCompany(string name, string city, string postcode, string street, string number, string phoneNumber,
+            string NIP, string email);
+
         Task FinishOrder(int orderId);
 
         Task<IEnumerable<PrintOrderDetail>> GetProductsSold(string sort);

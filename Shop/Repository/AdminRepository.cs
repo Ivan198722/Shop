@@ -60,7 +60,7 @@ namespace Shop.Repository
                     Category = c,
                     products = c.products
                     .Where(p => p.categoryId == categoryId)
-                    .OrderBy(p => p.addDate)
+                    .OrderByDescending(p => p.addDate)
 
                     .ToList()
                 })

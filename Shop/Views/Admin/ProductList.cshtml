@@ -44,6 +44,11 @@
             width: 7em; 
         }
 
+    tr.spacing-row td {
+        padding-top: 10px; /* Увеличивает отступ сверху для строк */
+        border:none;
+        background-color:transparent;
+    }
 </style>
 
 
@@ -159,6 +164,29 @@
         <table class="col-lg-10">
         <thead>
             <tr>
+                <form id="addProductForm" asp-controller="Admin" asp-action="AddProduct" method="post">
+                    <input type="hidden" name="categoryId" value="@category.Category.Id" />
+                <td></td>
+                <td class="flex-container">
+                    <input type="text" id="addManufacturer" name="manufacturer" placeholder="Marka" style="width: 100%; border: none;">
+                </td>
+                <td class="flex-container">
+                    <input type="text" id="addName" name="name" placeholder="Nazwa" style="width: 100%;border: none;">
+                </td>
+                <td class="flex-container">
+                    <input type="text" id="addPrice" name="price" placeholder="Cena" style="width: 100%;border: none;">
+                </td>
+                <td>
+                    <button type="submit" class="button-edit btn btn-secondary square-button">
+                        <span>Dodaj</span>
+                    </button>
+                </td>
+                </form>
+            </tr>
+            <tr class="spacing-row">
+                <td colspan="5"></td>
+            </tr>
+            <tr>
                 <th>ID</th>
                 <th>Marka</th>
                 <th>Nazwa</th>
@@ -169,6 +197,7 @@
             </tr>
         </thead>
         <tbody>
+            
             @foreach (var product in category.products)
             {
 
@@ -193,26 +222,7 @@
 
             }
 
-            <tr>
-                <form id="addProductForm" asp-controller="Admin" asp-action="AddProduct" method="post">
-                    <input type="hidden" name="categoryId" value="@category.Category.Id" />
-                <td></td>
-                <td class="flex-container">
-                    <input type="text" id="addManufacturer" name="manufacturer" placeholder="Marka" style="width: 100%; border: none;">
-                </td>
-                <td class="flex-container">
-                    <input type="text" id="addName" name="name" placeholder="Nazwa" style="width: 100%;border: none;">
-                </td>
-                <td class="flex-container">
-                    <input type="text" id="addPrice" name="price" placeholder="Cena" style="width: 100%;border: none;">
-                </td>
-                <td>
-                    <button type="submit" class="button-edit btn btn-secondary square-button">
-                        <span>Dodaj</span>
-                    </button>
-                </td>
-                </form>
-            </tr>
+            
     
         </tbody>
     </table>

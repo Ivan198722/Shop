@@ -202,6 +202,22 @@ namespace Shop.Repository
 
         public async Task<Company> GetDataCompany() => await _dbContext.Company.FirstOrDefaultAsync();
 
+        public async Task EditCompany(string name,string city,string postcode,string street,string number,string phoneNumber,
+            string NIP,string email)
+        {
+            var company = await _dbContext.Company.FirstOrDefaultAsync();
+
+            if (!string.IsNullOrEmpty(name)) {  company.name=name;}
+            if (!string.IsNullOrEmpty(city)) {company.city=city; }
+            if (!string.IsNullOrEmpty(postcode)) {company.postcode=postcode; }
+            if (!string.IsNullOrEmpty(street)) { company.street=street;}
+            if (!string.IsNullOrEmpty(number)) { company.number = number; }
+            if (!string.IsNullOrEmpty(phoneNumber)) { company.phoneNumber=phoneNumber; }
+            if (!string.IsNullOrEmpty(email)) { company.email=email; }
+            if(!string.IsNullOrEmpty(NIP)) {  company.NIP=NIP;}
+            await _dbContext.SaveChangesAsync();
+        }
+
 
         public async Task<IEnumerable<PrintCustomer>> GetCustomers(string sort )
         {
