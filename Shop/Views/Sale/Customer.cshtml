@@ -1,0 +1,93 @@
+﻿@{
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+<style>
+
+
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 3;
+        text-align: left;
+        background-color: white;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+
+
+    #customerName:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+</style>
+
+<div class="dropdown m-4">
+    <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Sortuj
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="?sort=quantity">Wg ilości</a></li>
+        <li><a class="dropdown-item" href="?sort=sum">Wg kwoty</a></li>
+
+    </ul>
+</div>
+
+<div class="row justify-content-start m-2 mt-2 mb-2 col-lg-8">
+
+    <div class="table-container m-lg-2">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nazwa</th>
+                    <th>Email</th>
+                    <th>Liczba </th>
+                    <th>Całkowita kw</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in Model.Customers)
+                {
+
+                    <tr>
+                        <td>@customer.Customer.Id</td>
+                        <td><a id="customerName" data-customer-Id="@customer.Customer.Id">@customer.Customer.name @customer.Customer.surname</a></td>
+                        <td>@customer.Customer.email</td>
+                        <td>@customer.quantityOrders</td>
+                        <td>@customer.totalSum</td>
+                    </tr>
+
+
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+<script>
+
+
+    document.querySelectorAll('#customerName').forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            const customerId = this.getAttribute('data-customer-id');
+
+
+            window.open(`/Sale/GetCustomerOrders?customerId=${customerId}`, '_blank');
+
+
+        });
+    });
+
+
+</script>

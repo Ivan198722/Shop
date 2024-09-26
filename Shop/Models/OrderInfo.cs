@@ -30,4 +30,16 @@
         public decimal price { get; set; }
     }
 
+    public class PrintCustomer
+    {
+        public Customer Customer { get; set; }
+
+       
+
+        public int quantityOrders { get; set; }
+
+        public decimal totalSum { get; set; }
+    }
+
+   
 }

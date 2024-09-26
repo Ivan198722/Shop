@@ -13,5 +13,8 @@ namespace Shop.Interfaces
         Task FinishOrder(int orderId);
 
         Task<IEnumerable<PrintOrderDetail>> GetProductsSold(string sort);
+
+        Task<IEnumerable<PrintCustomer>> GetCustomers(string sort);
+        Task<IEnumerable<OrderInfo>> GetCustomerOrders(int customerId);
     }
 }

@@ -196,5 +196,19 @@ namespace Shop.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> Customer(string sort)
+        {
+            var customer = await _allSale.GetCustomers(sort);
+            var viewModel = new SaleViewModel { Customers = customer };
+            return View(viewModel);
+        }
+
+        public async Task<IActionResult> GetCustomerOrders(int customerId)
+        {
+            var customerOrders = await _allSale.GetCustomerOrders(customerId);
+            var viewModel = new SaleViewModel { CustomerOrder = customerOrders };
+            return View(viewModel);
+        }
+
     }
 }

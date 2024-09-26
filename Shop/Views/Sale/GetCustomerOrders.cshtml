@@ -1,0 +1,153 @@
+﻿@{
+    Layout = "~/Views/Shared/Admin_Layout.cshtml";
+}
+
+
+<style>
+    .order p {
+        margin: 0;
+        background-color: aliceblue;
+        width: 100%;
+        
+    }
+   
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 3;
+        text-align: left;
+        background-color: white;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    
+</style>
+
+@{
+    string customer = null;
+    @foreach (var order in Model.CustomerOrder)
+{
+    
+   
+
+    @if(customer==null)
+            {
+                  <div class="order col-lg-3 m-3">
+                <p> @order.Customer.name @order.Customer.surname</p>
+
+                <p> @order.Customer.city @order.Customer.postcode</p>
+                <p>
+                    <span>@order.Customer.street </span>  <span>@order.Customer.NumberHouse</span>
+                    @if (order.Customer.NumberFlat != null)
+                {
+                        <span>/@order.Customer.NumberFlat</span>
+                }
+                else
+                { }
+                </p>
+                <p> @order.Customer.phone</p>
+                <p> @order.Customer.email</p>
+                <p> @order.Customer.NIP</p>
+                    </div>
+            }
+            else
+            {
+                
+            }
+
+
+            <div class="table-container m-lg-2 col-lg-8">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Data</th>
+                            <th>Nazwa</th>
+                            <th>Ilość</th>
+                            <th>Cena</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detail in order.Details)
+                    {
+
+                            <tr>
+                                <td>@detail.orderId</td>
+                                <td>@order.Order.OrderTime.ToString("dd/MM/yy")</td>
+                                <td>@detail.Product.name</td>
+                                <td>@detail.quantity</td>
+                                <td>@detail.price</td>
+                            </tr>
+
+
+                    }
+                    </tbody>
+                </table>
+            </div>
+
+    
+        customer = @order.Customer.email;
+}
+}
+         <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tables = document.querySelectorAll('.table-container table');
+        const columnWidths = [];
+
+        // Находим количество столбцов (предполагаем, что все таблицы имеют одинаковую структуру)
+        const firstTable = tables[0];
+        const columnCount = firstTable.querySelectorAll('thead th').length;
+
+        // Инициализируем массив с нулевыми значениями для всех столбцов
+        for (let i = 0; i < columnCount; i++) {
+            columnWidths[i] = 0;
+        }
+
+        // Пробегаем по всем таблицам и измеряем ширины столбцов
+        tables.forEach(table => {
+            const headers = table.querySelectorAll('thead th');
+            headers.forEach((header, index) => {
+                const headerWidth = header.offsetWidth;
+                if (headerWidth > columnWidths[index]) {
+                    columnWidths[index] = headerWidth;
+                }
+            });
+
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                cells.forEach((cell, index) => {
+                    const cellWidth = cell.offsetWidth;
+                    if (cellWidth > columnWidths[index]) {
+                        columnWidths[index] = cellWidth;
+                    }
+                });
+            });
+        });
+
+        // Устанавливаем одинаковые ширины для каждого столбца во всех таблицах
+        tables.forEach(table => {
+            const headers = table.querySelectorAll('thead th');
+            headers.forEach((header, index) => {
+                header.style.width = `${columnWidths[index]}px`;
+            });
+
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                cells.forEach((cell, index) => {
+                    cell.style.width = `${columnWidths[index]}px`;
+                });
+            });
+        });
+    });
+         </script>
+                             
