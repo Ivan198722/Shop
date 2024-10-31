@@ -1,0 +1,31 @@
+[33mcommit 666d07f926e1b09e7a16359f3513e31ff1afc818[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Ivan <stadnik198722@gmail.com>
+Date:   Thu Oct 10 19:51:47 2024 +0200
+
+    Stop tracking dbsettings.json
+
+[33mcommit 0b7d70e74678d112420ac3e7ebf268d83b1a31d4[m
+Author: Ivan <stadnik198722@gmail.com>
+Date:   Thu Oct 10 19:45:27 2024 +0200
+
+    Revert "First update after deploying to server"
+    
+    This reverts commit 51a63f5b873774c85f34d8417202da3429bd443e.
+
+[33mcommit 51a63f5b873774c85f34d8417202da3429bd443e[m
+Author: Ivan <stadnik198722@gmail.com>
+Date:   Mon Oct 7 20:08:52 2024 +0200
+
+    First update after deploying to server
+
+[33mcommit e76235037c97b48324ebb531dc05269fbb137430[m
+Author: Ivan <stadnik198722@gmail.com>
+Date:   Wed May 8 19:06:28 2024 +0200
+
+    Create DB
+
+[33mcommit 5af55c4ba24483fb6b2c9359c88c097c5de5df96[m
+Author: Ivan <stadnik198722@gmail.com>
+Date:   Mon May 6 19:45:16 2024 +0200
+
+    Partial configuration of services
