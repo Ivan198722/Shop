@@ -361,4 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+<<<<<<< HEAD
 Shop/dbsettings.json
+=======
+dbsettings.json
+>>>>>>> c14003a44e0b1011884281df88ae96198c5d84f5
